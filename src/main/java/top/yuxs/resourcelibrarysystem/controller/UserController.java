@@ -13,6 +13,8 @@ import top.yuxs.resourcelibrarysystem.pojo.Permission;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
 import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
+import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
+import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 
 import java.util.List;
 
@@ -82,5 +84,29 @@ public class UserController {
         long userId = StpUtil.getLoginIdAsLong();
         List<Permission> permissions = userService.getUserPermissions(userId);
         return Result.success(permissions);
+    }
+
+    // 更新用户信息
+    @PutMapping("/user/update")
+    public Result<String> updateUserInfo(@RequestBody @Valid UserUpdateDTO updateDTO) {
+        try {
+            long userId = StpUtil.getLoginIdAsLong();
+            userService.updateUserInfo(userId, updateDTO);
+            return Result.success("更新成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    // 修改密码
+    @PutMapping("/user/password")
+    public Result<String> updatePassword(@RequestBody @Valid PasswordUpdateDTO passwordDTO) {
+        try {
+            long userId = StpUtil.getLoginIdAsLong();
+            userService.updatePassword(userId, passwordDTO);
+            return Result.success("密码修改成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
     }
 }

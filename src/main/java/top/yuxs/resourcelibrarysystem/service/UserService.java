@@ -5,6 +5,8 @@ import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
 import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
+import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
+import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 
 import java.util.List;
 
@@ -26,4 +28,10 @@ public interface UserService {
     UserDTO getUserDetails(Long userId);
 
     void register(UserRegisterDTO registerDTO);
+
+    // 更新用户信息
+    void updateUserInfo(Long userId, UserUpdateDTO updateDTO);
+    
+    // 修改密码
+    void updatePassword(Long userId, PasswordUpdateDTO passwordDTO);
 }

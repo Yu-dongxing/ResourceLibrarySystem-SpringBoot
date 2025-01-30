@@ -9,6 +9,8 @@ import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
+import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
+import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.service.RoleService;
 
@@ -112,5 +114,62 @@ public class UserServiceImpl implements UserService {
         userDTO.setPermissions(permissionNames);
 
         return userDTO;
+    }
+
+    @Override
+    @Transactional
+    public void updateUserInfo(Long userId, UserUpdateDTO updateDTO) {
+        // 1. 检查用户是否存在
+        Users user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 2. 如果修改手机号，检查新手机号是否已被使用
+        if (updateDTO.getPhoneNumber() != null && !updateDTO.getPhoneNumber().equals(user.getPhoneNumber())) {
+            Users existUser = findPhoneNumber(updateDTO.getPhoneNumber());
+            if (existUser != null) {
+                throw new RuntimeException("该手机号已被使用");
+            }
+            user.setPhoneNumber(updateDTO.getPhoneNumber());
+        }
+
+        // 3. 更新其他信息
+        if (updateDTO.getUsername() != null) {
+            user.setUsername(updateDTO.getUsername());
+        }
+        if (updateDTO.getEmail() != null) {
+            user.setEmail(updateDTO.getEmail());
+        }
+        
+        user.setUpdateTime(LocalDateTime.now());
+        
+        // 4. 保存更新
+        userMapper.update(user);
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(Long userId, PasswordUpdateDTO passwordDTO) {
+        // 1. 验证用户是否存在
+        Users user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 2. 验证原密码是否正确
+        if (!user.getPassword().equals(passwordDTO.getOldPassword())) {
+            throw new RuntimeException("原密码不正确");
+        }
+
+        // 3. 验证两次输入的新密码是否一致
+        if (!passwordDTO.getNewPassword().equals(passwordDTO.getConfirmPassword())) {
+            throw new RuntimeException("两次输入的新密码不一致");
+        }
+
+        // 4. 更新密码
+        user.setPassword(passwordDTO.getNewPassword());
+        user.setUpdateTime(LocalDateTime.now());
+        userMapper.update(user);
     }
 }
