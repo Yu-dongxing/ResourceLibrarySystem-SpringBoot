@@ -5,7 +5,7 @@ import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import java.util.List;
 
 public interface ResourceService {
-    void add(Resource resource);
+    void add(Resource resource,String name);
 
     List<Resource> list();
 

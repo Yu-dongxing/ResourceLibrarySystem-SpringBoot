@@ -128,13 +128,13 @@ public class UserServiceImpl implements UserService {
         // 2. 如果修改手机号，检查新手机号是否已被使用
         if (updateDTO.getPhoneNumber() != null && !updateDTO.getPhoneNumber().equals(user.getPhoneNumber())) {
             Users existUser = findPhoneNumber(updateDTO.getPhoneNumber());
-            if (existUser != null) {
+            if (existUser != null && !existUser.getId().equals(userId)) {
                 throw new RuntimeException("该手机号已被使用");
             }
             user.setPhoneNumber(updateDTO.getPhoneNumber());
         }
 
-        // 3. 更新其他信息
+        // 3. 更新其他基本信息
         if (updateDTO.getUsername() != null) {
             user.setUsername(updateDTO.getUsername());
         }
@@ -144,7 +144,21 @@ public class UserServiceImpl implements UserService {
         
         user.setUpdateTime(LocalDateTime.now());
         
-        // 4. 保存更新
+        // 4. 更新用户角色
+        if (updateDTO.getRoleId() != null) {
+            // 检查角色是否存在
+            if (!roleService.exists(updateDTO.getRoleId())) {
+                throw new RuntimeException("指定的角色不存在");
+            }
+            
+            // 删除原有角色关联
+            userMapper.deleteUserRoles(userId);
+            
+            // 添加新的角色关联
+            userMapper.insertUserRole(userId, updateDTO.getRoleId());
+        }
+        
+        // 5. 保存用户信息更新
         userMapper.update(user);
     }
 

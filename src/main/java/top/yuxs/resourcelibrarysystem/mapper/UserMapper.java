@@ -37,4 +37,7 @@ public interface UserMapper {
 
     @Insert("INSERT INTO user_roles (user_id, role_id) VALUES (#{userId}, #{roleId})")
     void insertUserRole(@Param("userId") Long userId, @Param("roleId") Integer roleId);
+
+    @Delete("DELETE FROM user_roles WHERE user_id = #{userId}")
+    void deleteUserRoles(Long userId);
 }

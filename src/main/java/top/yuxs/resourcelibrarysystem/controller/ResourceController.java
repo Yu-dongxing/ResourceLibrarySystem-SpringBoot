@@ -1,6 +1,7 @@
 package top.yuxs.resourcelibrarysystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,8 @@ public class ResourceController {
     //资源库添加接口
     @PostMapping("/admin/add")
     public Result add(@RequestBody Resource resource ){
-        resourceService.add(resource);
+        String name = (String) StpUtil.getExtra("username");
+        resourceService.add(resource,name);
         return Result.success(resource);
     }
     //资源库逻辑删除接口

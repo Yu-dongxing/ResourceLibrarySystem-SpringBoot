@@ -13,9 +13,10 @@ public class ResourceServiceImpl  implements ResourceService {
     @Autowired
     private ResourceMapper resourceMapper;
     @Override
-    public void add(Resource resource) {
+    public void add(Resource resource,String name) {
         resource.setCreateTime(LocalDateTime.now());
         resource.setUpdateTime(LocalDateTime.now());
+        resource.setAuthor(name);
         resourceMapper.insert(resource);
     }
 

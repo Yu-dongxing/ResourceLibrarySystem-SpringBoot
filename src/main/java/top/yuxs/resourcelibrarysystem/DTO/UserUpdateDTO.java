@@ -11,4 +11,6 @@ public class UserUpdateDTO {
     private String phoneNumber;
     
     private String email;
+    
+    private Integer roleId;
 } 
