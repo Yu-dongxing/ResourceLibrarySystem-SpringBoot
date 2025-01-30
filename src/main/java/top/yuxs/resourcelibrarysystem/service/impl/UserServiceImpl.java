@@ -23,4 +23,9 @@ public class UserServiceImpl implements UserService {
     public Users findPhoneNumber(String phoneNumber) {
         return userMapper.selectByPhoneNumber(phoneNumber);
     }
+
+    @Override
+    public Users selectById(long id) {
+        return userMapper.selectById(id);
+    }
 }

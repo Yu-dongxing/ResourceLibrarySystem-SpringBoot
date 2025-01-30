@@ -33,7 +33,7 @@ public class UserController {
             return Result.error("用户名错误");
         }
         if(password.equals(loginUser.getPassword())){
-            StpUtil.login(loginUser.getUsername(), SaLoginConfig
+            StpUtil.login(loginUser.getId(), SaLoginConfig
                     .setExtra("userId", loginUser.getId())
                     .setExtra("username", loginUser.getUsername())
                     .setExtra("phoneNumber", loginUser.getPhoneNumber()));
@@ -42,5 +42,12 @@ public class UserController {
         }else {
             return Result.error("密码错误，请重新输入");
         }
+    }
+    //获取用户信息
+    @GetMapping("/userInfo")
+    public Result<Users> selectById(){
+        long userId = StpUtil.getLoginIdAsLong();
+        Users userinfo  = userservice.selectById(userId);
+        return Result.success(userinfo);
     }
 }

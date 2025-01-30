@@ -6,4 +6,6 @@ public interface UserService {
     void add(Users users);
 
     Users findPhoneNumber(String phoneNumber);
+
+    Users selectById(long id);
 }

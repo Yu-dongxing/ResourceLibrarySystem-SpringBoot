@@ -18,7 +18,7 @@ public interface RoleMapper {
     Role selectById(Integer id);
     // 查询所有角色
     @Select("SELECT * FROM roles ")
-    Role selectByAll();
+    List<Role> selectByAll();
 
     // 根据名称查询角色
     @Select("SELECT * FROM roles WHERE name = #{name}")

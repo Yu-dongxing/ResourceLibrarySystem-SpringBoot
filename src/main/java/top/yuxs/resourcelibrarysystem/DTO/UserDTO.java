@@ -1,4 +1,4 @@
-package top.yuxs.resourcelibrarysystem.pojo;
+package top.yuxs.resourcelibrarysystem.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -6,9 +6,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//用户信息和用户角色和用户权限类
 @Data
-public class User {
+public class UserDTO {
     private Long id;
     private String username;
     private String email;
