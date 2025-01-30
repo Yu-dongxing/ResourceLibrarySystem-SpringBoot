@@ -5,13 +5,18 @@ import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.yuxs.resourcelibrarysystem.interceptor.PermissionInterceptor;
 
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
+    @Autowired
+    private PermissionInterceptor permissionInterceptor;
+    
     // Sa-Token 整合 jwt (Simple 简单模式)
     @Bean
     public StpLogic getStpLogicJwt() {
@@ -34,5 +39,9 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     .notMatch("/api/resources/public/**")
                     .check(r -> StpUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
         })).addPathPatterns("/**");
+        
+        // 注册权限拦截器
+        registry.addInterceptor(permissionInterceptor)
+                .addPathPatterns("/**");
     }
 }
