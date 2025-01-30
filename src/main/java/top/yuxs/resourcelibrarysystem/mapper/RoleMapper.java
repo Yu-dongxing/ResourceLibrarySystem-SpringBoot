@@ -17,7 +17,7 @@ public interface RoleMapper {
     @Select("SELECT * FROM roles WHERE id = #{id}")
     Role selectById(Integer id);
     // 查询所有角色
-    @Select("SELECT * FROM roles ")
+    @Select("SELECT * FROM roles")
     List<Role> selectByAll();
 
     // 根据名称查询角色
@@ -33,7 +33,14 @@ public interface RoleMapper {
     void delete(Integer id);
 
     // 查询角色的所有权限
-    @Select("SELECT p.* FROM permissions p JOIN role_permissions rp ON p.id = rp.permission_id " +
+    @Select("SELECT p.* FROM permissions p " +
+            "JOIN role_permissions rp ON p.id = rp.permission_id " +
             "WHERE rp.role_id = #{roleId}")
     List<Permission> selectPermissionsByRoleId(Integer roleId);
+
+    @Insert("INSERT INTO role_permissions (role_id, permission_id) VALUES (#{roleId}, #{permissionId})")
+    void insertRolePermission(@Param("roleId") Integer roleId, @Param("permissionId") Integer permissionId);
+
+    @Delete("DELETE FROM role_permissions WHERE role_id = #{roleId}")
+    void deleteRolePermissions(Integer roleId);
 }
