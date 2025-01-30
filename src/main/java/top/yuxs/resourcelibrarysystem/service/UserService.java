@@ -4,6 +4,7 @@ import top.yuxs.resourcelibrarysystem.pojo.Users;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
 import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
+import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface UserService {
     
     // 获取用户详细信息（包含角色和权限）
     UserDTO getUserDetails(Long userId);
+
+    void register(UserRegisterDTO registerDTO);
 }

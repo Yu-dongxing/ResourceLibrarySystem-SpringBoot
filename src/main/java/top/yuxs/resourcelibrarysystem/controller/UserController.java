@@ -3,6 +3,7 @@ package top.yuxs.resourcelibrarysystem.controller;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.yuxs.resourcelibrarysystem.pojo.Result;
@@ -11,6 +12,7 @@ import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
 import top.yuxs.resourcelibrarysystem.service.UserService;
+import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 
 import java.util.List;
 
@@ -23,9 +25,13 @@ public class UserController {
     
     //注册接口（待修改）
     @PostMapping("/sign")
-    public Result<String> sign(@RequestBody Users users ){
-        userService.add(users);
-        return Result.success("注册成功");
+    public Result<String> register(@RequestBody @Valid UserRegisterDTO registerDTO) {
+        try {
+            userService.register(registerDTO);
+            return Result.success("注册成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
     }
     //登录接口
     @PostMapping("/login")

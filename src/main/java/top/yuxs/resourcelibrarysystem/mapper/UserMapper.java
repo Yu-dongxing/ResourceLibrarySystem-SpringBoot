@@ -34,4 +34,7 @@ public interface UserMapper {
     @Select("SELECT p.* FROM permissions p JOIN role_permissions rp ON p.id = rp.permission_id " +
             "JOIN user_roles ur ON rp.role_id = ur.role_id WHERE ur.user_id = #{userId}")
     List<Permission> selectPermissionsByUserId(Long userId);
+
+    @Insert("INSERT INTO user_roles (user_id, role_id) VALUES (#{userId}, #{roleId})")
+    void insertUserRole(@Param("userId") Long userId, @Param("roleId") Integer roleId);
 }
