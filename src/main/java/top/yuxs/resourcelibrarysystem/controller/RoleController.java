@@ -20,7 +20,7 @@ public class RoleController {
     private RoleService roleService;
 
     // 获取所有角色
-    @GetMapping("/roles")
+    @GetMapping("/public/getRoles")
     public Result<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getRoleAll();
         return Result.success(roles);
