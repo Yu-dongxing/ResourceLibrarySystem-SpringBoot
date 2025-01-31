@@ -34,7 +34,8 @@ public class ResourceController {
     //资源库更新接口
     @PutMapping("/admin/update")
     public Result update(@RequestBody @Validated(Resource.Update.class) Resource resource){
-        resourceService.update(resource);
+        String name = (String) StpUtil.getExtra("username");
+        resourceService.update(resource,name);
         return Result.success(resource);
     }
     //资源库公开接口

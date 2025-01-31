@@ -31,8 +31,9 @@ public class ResourceServiceImpl  implements ResourceService {
     }
 
     @Override
-    public void update(Resource resource) {
+    public void update(Resource resource, String name) {
         resource.setUpdateTime(LocalDateTime.now());
+        resource.setAuthor(name);
         resourceMapper.update(resource);
     }
 

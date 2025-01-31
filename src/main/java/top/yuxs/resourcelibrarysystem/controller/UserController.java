@@ -41,7 +41,7 @@ public class UserController {
         Users loginUser = userService.findPhoneNumber(phoneNumber);
         //判断用户是否存在
         if(loginUser==null){
-            return Result.error("用户名错误");
+            return Result.error("用户手机号错误"+phoneNumber+password);
         }
         if(password.equals(loginUser.getPassword())){
             StpUtil.login(loginUser.getId(), SaLoginConfig

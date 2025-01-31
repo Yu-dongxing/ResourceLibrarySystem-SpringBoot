@@ -12,5 +12,5 @@ public interface ResourceService {
     void logicDelete(Long id);
 
 
-    void update(Resource resource);
+    void update(Resource resource, String name);
 }
