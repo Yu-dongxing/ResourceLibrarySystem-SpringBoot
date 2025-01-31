@@ -19,7 +19,7 @@ public class Result<T> {
         return new Result(200,"操作成功",null);
     }
     public static Result error(String message ){
-        return new Result(1,message,null);
+        return new Result(400,message,null);
     }
 
 }

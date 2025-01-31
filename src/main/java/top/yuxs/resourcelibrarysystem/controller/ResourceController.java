@@ -21,6 +21,9 @@ public class ResourceController {
     @PostMapping("/admin/add")
     public Result add(@RequestBody Resource resource ){
         String name = (String) StpUtil.getExtra("username");
+        if (name==null){
+            name="GUEST";
+        }
         resourceService.add(resource,name);
         return Result.success(resource);
     }

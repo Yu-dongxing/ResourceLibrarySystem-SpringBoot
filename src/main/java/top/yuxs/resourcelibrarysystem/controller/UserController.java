@@ -27,11 +27,15 @@ public class UserController {
     //注册接口（待修改）
     @PostMapping("/sign")
     public Result<String> register(@RequestBody @Valid UserRegisterDTO registerDTO) {
-        try {
-            userService.register(registerDTO);
-            return Result.success("注册成功");
-        } catch (RuntimeException e) {
-            return Result.error(e.getMessage());
+        if(registerDTO.getRoleId()==1){
+            return Result.error("角色id错误");
+        }else {
+            try {
+                userService.register(registerDTO);
+                return Result.success("注册成功");
+            } catch (RuntimeException e) {
+                return Result.error(e.getMessage());
+            }
         }
     }
     //登录接口

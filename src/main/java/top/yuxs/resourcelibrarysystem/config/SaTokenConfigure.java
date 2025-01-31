@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.yuxs.resourcelibrarysystem.interceptor.PermissionInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
+import cn.dev33.satoken.context.SaHolder;
 
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
@@ -28,13 +29,19 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，定义详细认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
-            // 原有的登录认证规则
-            SaRouter
-                    .match("/api/resources/**")    
+            // 指定需要排除的跨域请求 
+            SaRouter.match("/**")
                     .notMatch("/api/resources/sign")        
                     .notMatch("/api/resources/login")
                     .notMatch("/api/resources/public/**")
-                    .check(r -> StpUtil.checkLogin());
+                    .check(r -> {
+                        // 允许跨域的 OPTIONS 请求直接通过 
+                        if(SaHolder.getRequest().getMethod().equals(SaHttpMethod.OPTIONS.toString())) {
+                            SaRouter.stop();
+                        }
+                        // 其他请求需要登录认证
+                        StpUtil.checkLogin();
+                    });
         })).addPathPatterns("/**");
         
         // 注册权限拦截器
