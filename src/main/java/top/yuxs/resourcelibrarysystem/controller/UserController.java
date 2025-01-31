@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
-@CrossOrigin // 允许跨域请求
 public class UserController {
     @Autowired
     private UserService userService;
@@ -63,6 +62,7 @@ public class UserController {
     }
 
     // 获取当前用户的详细信息（包含角色和权限）
+    @CrossOrigin
     @GetMapping("/user/details")
     public Result<UserDTO> getCurrentUserDetails() {
         long userId = StpUtil.getLoginIdAsLong();

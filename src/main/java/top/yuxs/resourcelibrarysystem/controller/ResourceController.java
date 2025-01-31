@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
-@CrossOrigin // 允许跨域请求
 public class ResourceController {
     @Autowired
     private ResourceService resourceService;
