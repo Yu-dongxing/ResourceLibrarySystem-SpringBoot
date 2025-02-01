@@ -47,4 +47,46 @@ public class ResourceController {
         List<Resource> cs = resourceService.list();
         return Result.success(cs);
     }
+
+    // 综合搜索接口
+    @GetMapping("/public/search")
+    public Result<List<Resource>> search(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String startTime,
+            @RequestParam(required = false) String endTime) {
+        List<Resource> resources = resourceService.search(keyword, category, author, startTime, endTime);
+        return Result.success(resources);
+    }
+
+    // 关键词搜索
+    @GetMapping("/public/search/keyword")
+    public Result<List<Resource>> searchByKeyword(@RequestParam String keyword) {
+        List<Resource> resources = resourceService.searchByKeyword(keyword);
+        return Result.success(resources);
+    }
+
+    // 分类搜索
+    @GetMapping("/public/search/category")
+    public Result<List<Resource>> searchByCategory(@RequestParam String category) {
+        List<Resource> resources = resourceService.searchByCategory(category);
+        return Result.success(resources);
+    }
+
+    // 作者搜索
+    @GetMapping("/public/search/author")
+    public Result<List<Resource>> searchByAuthor(@RequestParam String author) {
+        List<Resource> resources = resourceService.searchByAuthor(author);
+        return Result.success(resources);
+    }
+
+    // 时间范围搜索
+    @GetMapping("/public/search/time")
+    public Result<List<Resource>> searchByTimeRange(
+            @RequestParam(required = false) String startTime,
+            @RequestParam(required = false) String endTime) {
+        List<Resource> resources = resourceService.searchByTimeRange(startTime, endTime);
+        return Result.success(resources);
+    }
 }
