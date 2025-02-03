@@ -40,4 +40,12 @@ public interface UserMapper {
 
     @Delete("DELETE FROM user_roles WHERE user_id = #{userId}")
     void deleteUserRoles(Long userId);
+
+    // 获取所有用户
+    @Select("SELECT * FROM users")
+    List<Users> selectAllUsers();
+
+    // 删除用户
+    @Delete("DELETE FROM users WHERE id = #{id}")
+    void deleteUser(Long id);
 }

@@ -34,4 +34,13 @@ public interface UserService {
     
     // 修改密码
     void updatePassword(Long userId, PasswordUpdateDTO passwordDTO);
+
+    // 获取所有用户详细信息
+    List<UserDTO> getAllUsersDetails();
+    
+    // 删除用户
+    void deleteUser(Long userId);
+    
+    // 更新用户完整信息（包括角色和权限）
+    void updateUserComplete(Long userId, UserUpdateDTO updateDTO);
 }

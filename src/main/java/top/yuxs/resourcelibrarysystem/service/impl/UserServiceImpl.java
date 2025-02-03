@@ -186,4 +186,67 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime(LocalDateTime.now());
         userMapper.update(user);
     }
+
+    @Override
+    public List<UserDTO> getAllUsersDetails() {
+        // 获取所有用户基本信息
+        List<Users> users = userMapper.selectAllUsers();
+        
+        // 转换为UserDTO列表
+        return users.stream()
+            .map(user -> {
+                UserDTO userDTO = new UserDTO();
+                // 复制基本信息
+                userDTO.setId(user.getId());
+                userDTO.setUsername(user.getUsername());
+                userDTO.setEmail(user.getEmail());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                userDTO.setCreateTime(user.getCreateTime());
+                userDTO.setUpdateTime(user.getUpdateTime());
+                
+                // 获取用户角色
+                List<Role> roles = getUserRoles(user.getId());
+                if (!roles.isEmpty()) {
+                    Role primaryRole = roles.get(0);
+                    userDTO.setRoleName(primaryRole.getName());
+                    userDTO.setRoleId(primaryRole.getId());
+                }
+                
+                // 获取用户权限
+                List<Permission> permissions = getUserPermissions(user.getId());
+                List<String> permissionNames = permissions.stream()
+                        .map(Permission::getName)
+                        .collect(Collectors.toList());
+                userDTO.setPermissions(permissionNames);
+                
+                return userDTO;
+            })
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long userId) {
+        // 检查用户是否存在
+        Users user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        
+        // 删除用户角色关联
+        userMapper.deleteUserRoles(userId);
+        
+        // 删除用户
+        userMapper.deleteUser(userId);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserComplete(Long userId, UserUpdateDTO updateDTO) {
+        // 首先执行现有的updateUserInfo方法
+        updateUserInfo(userId, updateDTO);
+        
+        // 如果需要更新额外的信息，可以在这里添加
+        // 例如更新其他关联表的数据
+    }
 }

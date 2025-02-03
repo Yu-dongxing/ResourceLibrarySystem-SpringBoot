@@ -15,6 +15,7 @@ import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
 import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
+import top.yuxs.resourcelibrarysystem.annotation.RequiresPermission;
 
 import java.util.List;
 
@@ -109,6 +110,40 @@ public class UserController {
             long userId = StpUtil.getLoginIdAsLong();
             userService.updatePassword(userId, passwordDTO);
             return Result.success("密码修改成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    // 获取所有用户详细信息
+    @GetMapping("/admin/users")
+//    @RequiresPermission("user:view")
+    public Result<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsersDetails();
+        return Result.success(users);
+    }
+    
+    // 删除用户
+    @DeleteMapping("/admin/users/{userId}")
+//    @RequiresPermission("user:delete")
+    public Result<String> deleteUser(@PathVariable Long userId) {
+        try {
+            userService.deleteUser(userId);
+            return Result.success("用户删除成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+    
+    // 更新用户完整信息
+    @PutMapping("/admin/users/{userId}")
+//    @RequiresPermission("user:update")
+    public Result<String> updateUserComplete(
+            @PathVariable Long userId,
+            @RequestBody @Valid UserUpdateDTO updateDTO) {
+        try {
+            userService.updateUserComplete(userId, updateDTO);
+            return Result.success("用户信息更新成功");
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         }
