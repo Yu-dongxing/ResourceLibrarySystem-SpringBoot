@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class UserDTO {
+//    用户信息
     private Long id;
     private String username;
     private String email;
@@ -16,6 +17,7 @@ public class UserDTO {
     private LocalDateTime createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
+//    角色权限信息
     private String roleName;
     private int roleId;
     private List<String> permissions;

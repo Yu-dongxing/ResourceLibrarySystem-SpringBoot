@@ -18,6 +18,7 @@ import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 import top.yuxs.resourcelibrarysystem.annotation.RequiresPermission;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -142,8 +143,12 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody @Valid UserUpdateDTO updateDTO) {
         try {
-            userService.updateUserComplete(userId, updateDTO);
-            return Result.success("用户信息更新成功");
+            if (updateDTO.getRoleId()==1 && !Objects.equals(updateDTO.getUsername(), "admin")){
+                return Result.error("角色错误");
+            }else {
+                userService.updateUserComplete(userId, updateDTO);
+                return Result.success("用户信息更新成功");
+            }
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         }
