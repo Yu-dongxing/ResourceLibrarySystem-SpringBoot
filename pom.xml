@@ -10,7 +10,7 @@
     </parent>
     <groupId>top.yuxs</groupId>
     <artifactId>ResourceLibrarySystem</artifactId>
-    <version>0.2.5-RC1</version>
+    <version>0.2.4-RC1</version>
     <name>ResourceLibrarySystem</name>
     <description>ResourceLibrarySystem</description>
     <url/>
