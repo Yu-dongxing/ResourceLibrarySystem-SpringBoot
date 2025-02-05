@@ -42,20 +42,26 @@ public class UserController {
     }
     //登录接口
     @PostMapping("/login")
-    public Result<String> login(String phoneNumber,String password){
+    public Result<String> login(String phoneNumber, String password) {
         Users loginUser = userService.findPhoneNumber(phoneNumber);
         //判断用户是否存在
-        if(loginUser==null){
-            return Result.error("用户手机号错误"+phoneNumber+password);
+        if(loginUser == null) {
+            return Result.error("用户手机号错误" + phoneNumber + password);
         }
-        if(password.equals(loginUser.getPassword())){
+        if(password.equals(loginUser.getPassword())) {
+            // 获取用户角色
+            List<Role> roles = userService.getUserRoles(loginUser.getId());
+            String roleName = roles.isEmpty() ? "user" : roles.get(0).getName();
+            
             StpUtil.login(loginUser.getId(), SaLoginConfig
                     .setExtra("userId", loginUser.getId())
                     .setExtra("username", loginUser.getUsername())
-                    .setExtra("phoneNumber", loginUser.getPhoneNumber()));
+                    .setExtra("phoneNumber", loginUser.getPhoneNumber())
+                    .setExtra("role", roleName));  // 添加角色信息
+                    
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
             return Result.success(tokenInfo.tokenValue);
-        }else {
+        } else {
             return Result.error("密码错误，请重新输入");
         }
     }
