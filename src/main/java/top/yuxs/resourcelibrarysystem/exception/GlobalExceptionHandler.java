@@ -61,6 +61,12 @@ public class GlobalExceptionHandler {
 //            return SaResult.error("Token已被冻结");
             return Result.error(101,"Token已被冻结");
         }
+        if(e.getCode() == 11041) {
+            return Result.error(403, "无此角色权限");
+        }
+        if(e.getCode() == 11042) {
+            return Result.error(403, "无此角色权限：" + e.getMessage());
+        }
 
         // 更多 code 码判断 ...
 

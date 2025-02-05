@@ -42,6 +42,10 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                         // 其他请求需要登录认证
                         StpUtil.checkLogin();
                     });
+
+            // 管理员角色拦截
+//            SaRouter.match("/api/resources/admin/**", r -> StpUtil.checkRole("admin"));
+//            SaRouter.match("/api/resources/roles/**", r -> StpUtil.checkRole("admin"));
         })).addPathPatterns("/**");
         
         // 注册权限拦截器
