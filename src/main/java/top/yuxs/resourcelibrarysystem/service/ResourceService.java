@@ -1,5 +1,6 @@
 package top.yuxs.resourcelibrarysystem.service;
 
+import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 
 import java.util.List;
@@ -12,11 +13,14 @@ public interface ResourceService {
     void logicDelete(Long id);
 
 
-    void update(Resource resource, String name);
+    void update(ResourceUpdateDto resourceUpdateDto, String name,Long id);
 
     List<Resource> search(String keyword, String category, String author, String startTime, String endTime);
     List<Resource> searchByKeyword(String keyword);
     List<Resource> searchByCategory(String category);
     List<Resource> searchByAuthor(String author);
     List<Resource> searchByTimeRange(String startTime, String endTime);
+
+    Resource selectById(long id);
+
 }
