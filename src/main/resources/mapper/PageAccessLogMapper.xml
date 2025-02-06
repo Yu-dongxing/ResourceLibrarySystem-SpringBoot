@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.yuxs.resourcelibrarysystem.mapper.PageAccessLogMapper">
+
+    <!-- 插入页面访问日志 -->
+    <insert id="insertPageAccessLog" parameterType="top.yuxs.resourcelibrarysystem.pojo.PageAccessLog">
+        INSERT INTO page_access_log (
+            user_id, session_id, page_url, referer_url, ip_address, user_agent, response_time, status_code, device_type, log_details
+        ) VALUES (
+                     #{userId}, #{sessionId}, #{pageUrl}, #{refererUrl}, #{ipAddress}, #{userAgent}, #{responseTime}, #{statusCode}, #{deviceType}, #{logDetails}
+                 )
+    </insert>
+
+    <!-- 根据 ID 删除页面访问日志 -->
+    <delete id="deletePageAccessLogById">
+        DELETE FROM page_access_log WHERE id = #{id}
+    </delete>
+
+    <!-- 更新页面访问日志 -->
+    <update id="updatePageAccessLog" parameterType="top.yuxs.resourcelibrarysystem.pojo.PageAccessLog">
+        UPDATE page_access_log
+        SET
+            user_id = #{userId},
+            session_id = #{sessionId},
+            page_url = #{pageUrl},
+            referer_url = #{refererUrl},
+            access_time = #{accessTime},
+            ip_address = #{ipAddress},
+            user_agent = #{userAgent},
+            response_time = #{responseTime},
+            status_code = #{statusCode},
+            device_type = #{deviceType},
+            log_details = #{logDetails}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据 ID 查询页面访问日志 -->
+    <select id="selectPageAccessLogById" parameterType="long" resultType="top.yuxs.resourcelibrarysystem.pojo.PageAccessLog">
+        SELECT * FROM page_access_log WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有页面访问日志 -->
+    <select id="selectAllPageAccessLogs" resultType="top.yuxs.resourcelibrarysystem.pojo.PageAccessLog">
+        SELECT * FROM page_access_log
+    </select>
+
+</mapper>
