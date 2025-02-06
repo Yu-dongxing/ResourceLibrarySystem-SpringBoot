@@ -2,9 +2,11 @@ package top.yuxs.resourcelibrarysystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import top.yuxs.resourcelibrarysystem.pojo.Result;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
@@ -34,11 +36,17 @@ public class ResourceController {
         return Result.success("删除成功");
     }
     //资源库更新接口
-    @PutMapping("/admin/update")
-    public Result update(@RequestBody @Validated(Resource.Update.class) Resource resource){
+//    @PutMapping("/admin/update")
+//    public Result update(@RequestBody @Validated(Resource.Update.class) Resource resource){
+//        String name = (String) StpUtil.getExtra("username");
+//        resourceService.update(resource,name);
+//        return Result.success(resource);
+//    }
+    @PutMapping("/admin/update/{id}")
+    public Result update(@PathVariable long id , @RequestBody @Valid ResourceUpdateDto resourceUpdateDto){
         String name = (String) StpUtil.getExtra("username");
-        resourceService.update(resource,name);
-        return Result.success(resource);
+        resourceService.update(resourceUpdateDto,name,id);
+        return Result.success("更新成功");
     }
     //资源库公开接口
 //    @SaCheckLogin
@@ -47,7 +55,12 @@ public class ResourceController {
         List<Resource> cs = resourceService.list();
         return Result.success(cs);
     }
-
+//    根据id查询资源接口
+    @GetMapping("/public/get/{id}")
+    public Result<Resource> selectByID(@PathVariable long id){
+        Resource cs = resourceService.selectById(id);
+        return Result.success(cs);
+    }
     // 综合搜索接口
     @GetMapping("/public/search")
     public Result<List<Resource>> search(

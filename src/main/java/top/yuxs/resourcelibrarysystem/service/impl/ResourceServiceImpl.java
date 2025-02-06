@@ -2,6 +2,7 @@ package top.yuxs.resourcelibrarysystem.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.mapper.ResourceMapper;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
@@ -31,10 +32,21 @@ public class ResourceServiceImpl  implements ResourceService {
     }
 
     @Override
-    public void update(Resource resource, String name) {
-        resource.setUpdateTime(LocalDateTime.now());
-        resource.setAuthor(name);
-        resourceMapper.update(resource);
+    public void update(ResourceUpdateDto resourceUpdateDto, String name,Long id) {
+        Resource resource = resourceMapper.findById(id);
+        if(resource==null){
+            throw new RuntimeException("资源不存在");
+        }else {
+            resource.setUpdateTime(LocalDateTime.now());
+
+            resource.setImg(resourceUpdateDto.getImg());
+            resource.setName(resourceUpdateDto.getName());
+            resource.setAuthor(name);
+            resource.setUrl(resourceUpdateDto.getUrl());
+            resource.setTab(resourceUpdateDto.getTab());
+            resourceMapper.update(resource);
+        }
+
     }
 
     @Override
@@ -69,6 +81,11 @@ public class ResourceServiceImpl  implements ResourceService {
     @Override
     public List<Resource> searchByTimeRange(String startTime, String endTime) {
         return resourceMapper.searchByTimeRange(startTime, endTime);
+    }
+
+    @Override
+    public Resource selectById(long id) {
+        return resourceMapper.findById(id);
     }
 
 //    @Override
