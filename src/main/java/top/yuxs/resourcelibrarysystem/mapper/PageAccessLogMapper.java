@@ -11,10 +11,10 @@ public interface PageAccessLogMapper {
     void insertPageAccessLog(PageAccessLog log);
 
     // 删
-    int deletePageAccessLogById(@Param("id") Long id);
+    void deletePageAccessLogById(@Param("id") Long id);
 
     // 改
-    int updatePageAccessLog(PageAccessLog log);
+//    int updatePageAccessLog(PageAccessLog log);
 
     // 查
     PageAccessLog selectPageAccessLogById(@Param("id") Long id);
