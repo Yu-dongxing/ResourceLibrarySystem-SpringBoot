@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.yuxs.resourcelibrarysystem.mapper.IpAccessLogMapper">
+
+    <!-- 插入页面访问日志private String ipUserDevice;
+    private String ipUserAgent;-->
+    <insert id="insertIpAccessLog" parameterType="top.yuxs.resourcelibrarysystem.pojo.IpAccessLog">
+        INSERT INTO ip_access_log (ip_address, ip_city, ip_province, ip_repeat, ip_access_time, ip_user_device ,ip_user_agent) VALUES (
+                     #{ipAddress}, #{ipCity}, #{ipProvince}, #{ipRepeat}, #{ipAccessTime},#{ipUserDevice},#{ipUserAgent}
+                 )
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ip_access_log WHERE id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="top.yuxs.resourcelibrarysystem.pojo.IpAccessLog">
+        UPDATE ip_access_log
+        SET ip_address = #{ipAddress},
+            ip_city = #{ipCity},
+            ip_province = #{ipProvince},
+            ip_repeat = #{ipRepeat},
+            ip_access_time = #{ipAccessTime},
+            ip_user_device = #{ipUserDevice},
+            ip_user_agent = #{ipUserAgent}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM ip_access_log WHERE id = #{id}
+    </select>
+
+    <select id="selectByIpAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM ip_access_log WHERE ip_address = #{ipAddress}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM ip_access_log
+    </select>
+    <!-- 更新ipRepeat字段 -->
+    <update id="incrementIpRepeat" parameterType="java.lang.String">
+        UPDATE ip_access_log
+        SET ip_repeat = ip_repeat + 1
+        WHERE ip_address = #{ipAddress}
+    </update>
+    <!-- ResultMap -->
+    <resultMap id="BaseResultMap" type="top.yuxs.resourcelibrarysystem.pojo.IpAccessLog">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="ipAddress" column="ip_address" jdbcType="VARCHAR"/>
+        <result property="ipCity" column="ip_city" jdbcType="VARCHAR"/>
+        <result property="ipProvince" column="ip_province" jdbcType="VARCHAR"/>
+        <result property="ipRepeat" column="ip_repeat" jdbcType="BIGINT"/>
+        <result property="ipAccessTime" column="ip_access_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+</mapper>
