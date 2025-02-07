@@ -47,15 +47,15 @@
         </RollingFile>
     </appenders>
     <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
-<!--    <loggers>-->
-<!--        &lt;!&ndash;过滤掉spring和mybatis的一些无用的DEBUG信息&ndash;&gt;-->
-<!--        &lt;!&ndash;<logger name="org.springframework" level="INFO"/>&ndash;&gt;-->
-<!--        &lt;!&ndash;<logger name="org.mybatis" level="INFO"/>&ndash;&gt;-->
-<!--        <root level="debug">-->
-<!--            <appender-ref ref="Console"/>-->
-<!--            <appender-ref ref="RollingFileInfo"/>-->
-<!--            <appender-ref ref="RollingFileWarn"/>-->
-<!--            <appender-ref ref="RollingFileError"/>-->
-<!--        </root>-->
-<!--    </loggers>-->
+    <loggers>
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <!--<logger name="org.springframework" level="INFO"/>-->
+        <!--<logger name="org.mybatis" level="INFO"/>-->
+        <root level="INFO">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </loggers>
 </configuration>
