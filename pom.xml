@@ -10,7 +10,7 @@
     </parent>
     <groupId>top.yuxs</groupId>
     <artifactId>ResourceLibrarySystem</artifactId>
-    <version>0.2.7-RC2</version>
+    <version>0.2.8-RC2</version>
     <name>ResourceLibrarySystem</name>
     <description>ResourceLibrarySystem</description>
     <url/>
@@ -108,7 +108,17 @@
             <artifactId>sa-token-jwt</artifactId>
             <version>1.39.0</version>
         </dependency>
+<!--        添加文件上传-->
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version>
+        </dependency>
     </dependencies>
 
     <build>

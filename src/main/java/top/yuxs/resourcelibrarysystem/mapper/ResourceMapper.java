@@ -15,7 +15,7 @@ public interface ResourceMapper {
     @Select("SELECT * FROM resource_list WHERE id = #{id} AND is_deleted = 0")
     Resource findById(Long id);
     
-    @Select("SELECT * FROM resource_list WHERE is_deleted = 0 ORDER BY update_time DESC")
+    @Select("SELECT * FROM resource_list WHERE is_deleted = 0 AND is_audit = 1 ORDER BY update_time DESC")
     List<Resource> findAll();
     
     @Select("SELECT * FROM resource_list WHERE tab = #{tab} AND is_deleted = 0 ORDER BY create_time DESC")
@@ -63,4 +63,10 @@ public interface ResourceMapper {
     
     @Update("UPDATE resource_list SET is_deleted = 1 WHERE id = #{id}")
     void logicDeleteById(Long id);
+//    通过id审核资源
+    @Update("UPDATE resource_list SET is_audit = 1 WHERE id = #{id}")
+    void auditById(Long id);
+//    查询待审核的资源
+    @Select("SELECT * FROM resource_list WHERE is_audit = 0 ORDER BY update_time DESC")
+    List<Resource> searchAuditByAuditId();
 }
