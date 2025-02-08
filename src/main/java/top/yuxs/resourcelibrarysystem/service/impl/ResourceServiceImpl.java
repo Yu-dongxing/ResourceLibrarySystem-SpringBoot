@@ -88,6 +88,16 @@ public class ResourceServiceImpl  implements ResourceService {
         return resourceMapper.findById(id);
     }
 
+    @Override
+    public List<Resource> selectAudit() {
+        return resourceMapper.searchAuditByAuditId();
+    }
+
+    @Override
+    public void auditById(Long id) {
+        resourceMapper.auditById(id);
+    }
+
 //    @Override
 //    public Resource logicDeleteById(Integer id) {
 //        return null;

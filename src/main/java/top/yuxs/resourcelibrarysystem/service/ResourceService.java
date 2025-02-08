@@ -23,4 +23,7 @@ public interface ResourceService {
 
     Resource selectById(long id);
 
+    List<Resource> selectAudit();
+
+    void auditById(Long id);
 }

@@ -19,21 +19,24 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
     //资源库管理类接口
-    //资源库添加接口
-    @PostMapping("/admin/add")
-    public Result add(@RequestBody Resource resource ){
-        String name = (String) StpUtil.getExtra("username");
-        if (name==null){
-            name="GUEST";
-        }
-        resourceService.add(resource,name);
-        return Result.success(resource);
-    }
+
     //资源库逻辑删除接口
     @GetMapping("/admin/delete/{id}")
     public Result logicDelete(@PathVariable Long id) {
         resourceService.logicDelete(id);
         return Result.success("删除成功");
+    }
+//    资源库查询待审核通过接口
+    @GetMapping("/admin/audit/")
+    public Result<List<Resource>> selectAudit(){
+        List<Resource> cs = resourceService.selectAudit();
+        return Result.success(cs);
+    }
+//    根据id将资源审核通过
+    @PutMapping("/admin/audit/{id}")
+    public Result<String> auditById(@PathVariable Long id){
+        resourceService.auditById(id);
+        return Result.success("审核通过！");
     }
     //资源库更新接口
 //    @PutMapping("/admin/update")
@@ -54,6 +57,16 @@ public class ResourceController {
     public Result<List<Resource>> list(){
         List<Resource> cs = resourceService.list();
         return Result.success(cs);
+    }
+    //资源库添加接口
+    @PostMapping("/public/add")
+    public Result add(@RequestBody Resource resource ){
+        String name = (String) StpUtil.getExtra("username");
+        if (name==null){
+            name="GUEST";
+        }
+        resourceService.add(resource,name);
+        return Result.success(resource);
     }
 //    根据id查询资源接口
     @GetMapping("/public/get/{id}")
