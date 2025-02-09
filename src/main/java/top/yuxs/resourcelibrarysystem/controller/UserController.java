@@ -99,16 +99,16 @@ public class UserController {
     }
 
     // 更新用户信息
-    @PutMapping("/user/update")
-    public Result<String> updateUserInfo(@RequestBody @Valid UserUpdateDTO updateDTO) {
-        try {
-            long userId = StpUtil.getLoginIdAsLong();
-            userService.updateUserInfo(userId, updateDTO);
-            return Result.success("更新成功");
-        } catch (RuntimeException e) {
-            return Result.error(e.getMessage());
-        }
-    }
+//    @PutMapping("/user/update")
+//    public Result<String> updateUserInfo(@RequestBody @Valid UserUpdateDTO updateDTO) {
+//        try {
+//            long userId = StpUtil.getLoginIdAsLong();
+//            userService.updateUserInfo(userId, updateDTO);
+//            return Result.success("更新成功");
+//        } catch (RuntimeException e) {
+//            return Result.error(e.getMessage());
+//        }
+//    }
 
     // 修改密码
     @PutMapping("/user/password")
@@ -148,8 +148,9 @@ public class UserController {
     public Result<String> updateUserComplete(
             @PathVariable Long userId,
             @RequestBody @Valid UserUpdateDTO updateDTO) {
+        String userRole = (String) StpUtil.getExtra("role");
         try {
-            if (updateDTO.getRoleId()==1 && !Objects.equals(updateDTO.getUsername(), "admin")){
+            if (updateDTO.getRoleId() == 1 && !"admin".equals(userRole)){
                 return Result.error("角色错误");
             }else {
                 userService.updateUserComplete(userId, updateDTO);
