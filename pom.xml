@@ -119,6 +119,12 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.5</version>
         </dependency>
+<!--        ftp文件-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,5 +1,7 @@
 package top.yuxs.resourcelibrarysystem.service;
 
+import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 
@@ -26,4 +28,8 @@ public interface ResourceService {
     List<Resource> selectAudit();
 
     void auditById(Long id);
+
+    void addFileResource(ResourceFileDTO data,String name);
+
+    List<GetResourceFileListDTO> resourceFileList();
 }

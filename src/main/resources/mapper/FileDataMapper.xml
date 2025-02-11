@@ -4,8 +4,8 @@
 
     <!-- 插入文件信息 -->
     <insert id="insertFileData" parameterType="top.yuxs.resourcelibrarysystem.pojo.FileData">
-        INSERT INTO file_date (file_name, file_type, file_size, upload_time, file_path, file_md5, is_deleted, tenant_id)
-        VALUES (#{fileName}, #{fileType}, #{fileSize}, #{uploadTime}, #{filePath}, #{fileMd5}, #{isDeleted}, #{tenantId})
+        INSERT INTO file_date (uuid_file_name,file_name, file_type, file_size, upload_time, file_path, file_md5, is_deleted, resource_id,user_name,file_url)
+        VALUES (#{uuidFileName},#{fileName}, #{fileType}, #{fileSize}, #{uploadTime}, #{filePath}, #{fileMd5}, #{isDeleted}, #{resourceId},#{userName},#{fileUrl})
     </insert>
 
     <!-- 更新文件信息 -->
@@ -18,7 +18,10 @@
             file_path = #{filePath},
             file_md5 = #{fileMd5},
             is_deleted = #{isDeleted},
-            tenant_id = #{tenantId}
+            resource_id= #{resourceId},
+            user_name = #{userName},
+            file_url = #{fileUrl},
+            uuid_file_name = #{uuidFileName}
         WHERE id = #{id}
     </update>
 

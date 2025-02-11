@@ -17,5 +17,8 @@ public class FileData {
     private String filePath;
     private String fileMd5;
     private Integer isDeleted;
-    private Long tenantId;
+    private String resourceId;
+    private String userName;
+    private String fileUrl;
+    private String uuidFileName;
 }

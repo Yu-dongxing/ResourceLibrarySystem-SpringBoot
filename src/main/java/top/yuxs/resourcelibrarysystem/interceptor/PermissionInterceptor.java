@@ -12,6 +12,8 @@ import top.yuxs.resourcelibrarysystem.pojo.Permission;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import top.yuxs.resourcelibrarysystem.utils.IPUtils;
+
 import java.util.List;
 
 @Component
@@ -20,12 +22,14 @@ public class PermissionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+//    @Autowired
+//    private IPUtils ipUtils;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-
+//        ipUtils.getIpAddr(request);
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         RequiresPermission requiresPermission = handlerMethod.getMethodAnnotation(RequiresPermission.class);
         
