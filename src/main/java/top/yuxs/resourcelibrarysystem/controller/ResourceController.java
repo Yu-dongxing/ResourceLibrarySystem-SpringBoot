@@ -2,23 +2,106 @@ package top.yuxs.resourcelibrarysystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.DigestUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
+import top.yuxs.resourcelibrarysystem.pojo.FileData;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import top.yuxs.resourcelibrarysystem.pojo.Result;
+import top.yuxs.resourcelibrarysystem.service.FileDataService;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
+import top.yuxs.resourcelibrarysystem.utils.FtpUtil;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/resources")
 public class ResourceController {
+//    资源文件类型添加
+    @Autowired
+    private final FtpUtil ftpUtil = new FtpUtil();
+
+    @Value("${File-Proxy-Website.url}")
+    private String url;
+
+    @Autowired
+    private FileDataService fileDataService;
+
+
     @Autowired
     private ResourceService resourceService;
     //资源库管理类接口
+    //资源文件类型添加
+    @PostMapping("/admin/add")
+    public Result<String> addFileResource(@RequestPart("file") MultipartFile file, @RequestPart("resourceData") String resourceData) throws IOException {
+        String username = (String) StpUtil.getExtra("username");
+//        解析文件数据
+        FileData fileData = new FileData();
+        Long fileSize = file.getSize();
+        //文件原始文件名
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String fileExtension = getFileExtension(fileName);
+        //文件上传后的文件名
+        String uuidFileName = UUID.randomUUID().toString() + fileExtension;
+        //获取当前日期时间
+        LocalDateTime now = LocalDateTime.now();
+        //定义日期时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        //定义文件路径
+        String remotePath = "/"+now.format(formatter);
+        String filePath=remotePath+"/"+uuidFileName;
+        //完整文件路径
+        String fileUrl = url+remotePath+"/"+uuidFileName;
+        String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
+//        解析资源数据
+        ObjectMapper objectMapper = new ObjectMapper();
+        ResourceFileDTO data = objectMapper.readValue(resourceData,ResourceFileDTO.class);
+        data.setResourceFileId(String.valueOf(UUID.randomUUID()));
+        try {
+            resourceService.addFileResource(data,username);
+            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(),3);
+            if(success){
+                fileData.setFileName(fileName);
+                fileData.setFilePath(remotePath);
+                fileData.setFileUrl(fileUrl);
+                fileData.setFileMd5(md5);
+                fileData.setUploadTime(LocalDateTime.now());
+                fileData.setResourceId(data.getResourceFileId());
+                fileData.setUserName(username);
+                fileData.setFileType(fileExtension);
+                fileData.setFileSize(fileSize);
+                fileData.setIsDeleted(0);
+                fileData.setUuidFileName(uuidFileName);
+                fileDataService.add(fileData);
+                log.info("上传成功:"+fileUrl+"原始文件名"+fileName);
+                return Result.success("上传成功:"+fileUrl+"原始文件名"+fileName);
+            }else {
+                log.error("上传失败");
+                return Result.error("上传失败");
+            }
+        } catch (IOException e) {
+            return Result.error("上传异常: " + e.getMessage());
+        }
+
+//        resourceService.addFileResource(data,username);
+//        return Result.success("文件类型添加成功！！");
+    }
 
     //资源库逻辑删除接口
     @GetMapping("/admin/delete/{id}")
@@ -56,6 +139,12 @@ public class ResourceController {
     @GetMapping("/public/get")
     public Result<List<Resource>> list(){
         List<Resource> cs = resourceService.list();
+        return Result.success(cs);
+    }
+//    资源文件类获取
+    @GetMapping("/public/get/resourcefile")
+    public Result<List<GetResourceFileListDTO>> resourceFileList(){
+        List<GetResourceFileListDTO> cs = resourceService.resourceFileList();
         return Result.success(cs);
     }
     //资源库添加接口
@@ -114,5 +203,20 @@ public class ResourceController {
             @RequestParam(required = false) String endTime) {
         List<Resource> resources = resourceService.searchByTimeRange(startTime, endTime);
         return Result.success(resources);
+    }
+    /**
+     * 获取文件后缀名
+     * @param fileName 文件名
+     * @return 文件后缀名（带点，如 .txt）
+     */
+    private String getFileExtension(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return "";
+        }
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex);
+        }
+        return "";
     }
 }

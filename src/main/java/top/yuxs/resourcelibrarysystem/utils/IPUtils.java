@@ -2,13 +2,13 @@ package top.yuxs.resourcelibrarysystem.utils;
 
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 /**
  * IP地址
  */
-@Slf4j
+@Log4j2
 @Component
 public class IPUtils {
 

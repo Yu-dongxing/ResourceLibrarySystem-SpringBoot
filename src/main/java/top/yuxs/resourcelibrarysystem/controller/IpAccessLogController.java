@@ -1,6 +1,7 @@
 package top.yuxs.resourcelibrarysystem.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ import top.yuxs.resourcelibrarysystem.pojo.Result;
 import top.yuxs.resourcelibrarysystem.service.IpAccessLogService;
 
 import java.util.List;
-
+@Log4j2
 @RestController
 @RequestMapping("/api/resources")
 public class IpAccessLogController {
@@ -21,6 +22,7 @@ public class IpAccessLogController {
     @PostMapping("/public/ip_log/add")
     public Result<String> addLog(@RequestBody @Valid IpAccessLog ipAccessLog) {
         ipAccessLogService.add(ipAccessLog);
+        log.info("添加ip访问日志");
         return Result.success("添加成功");
     }
     //    查询所有日志

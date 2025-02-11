@@ -2,17 +2,25 @@ package top.yuxs.resourcelibrarysystem.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
+import top.yuxs.resourcelibrarysystem.mapper.FileDataMapper;
 import top.yuxs.resourcelibrarysystem.mapper.ResourceMapper;
+import top.yuxs.resourcelibrarysystem.pojo.FileData;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ResourceServiceImpl  implements ResourceService {
     @Autowired
     private ResourceMapper resourceMapper;
+
+    @Autowired
+    private FileDataMapper fileDataMapper;
     @Override
     public void add(Resource resource,String name) {
         resource.setCreateTime(LocalDateTime.now());
@@ -96,6 +104,44 @@ public class ResourceServiceImpl  implements ResourceService {
     @Override
     public void auditById(Long id) {
         resourceMapper.auditById(id);
+    }
+
+    @Override
+    public void addFileResource(ResourceFileDTO data,String name) {
+        Resource resource = new Resource();
+        resource.setResourceFileId(data.getResourceFileId());
+        resource.setImg(data.getImg());
+        resource.setName(data.getName());
+        resource.setUrl("null");
+        resource.setTab(data.getTab());
+        resource.setAuthor(name);
+        resource.setUpdateTime(LocalDateTime.now());
+        resource.setCreateTime(LocalDateTime.now());
+        resourceMapper.insert(resource);
+    }
+
+    @Override
+    public List<GetResourceFileListDTO> resourceFileList() {
+        List<Resource> resourceList = resourceMapper.findAll();
+        return resourceList.stream().map(resource -> {
+            GetResourceFileListDTO getResourceFileListDTO = new GetResourceFileListDTO();
+            getResourceFileListDTO.setName(resource.getName());
+            getResourceFileListDTO.setImg(resource.getImg());
+            getResourceFileListDTO.setUrl(resource.getUrl());
+            getResourceFileListDTO.setAuthor(resource.getAuthor());
+            getResourceFileListDTO.setTab(resource.getTab());
+            getResourceFileListDTO.setUpdateTime(resource.getUpdateTime());
+            getResourceFileListDTO.setCreateTime(resource.getCreateTime());
+            getResourceFileListDTO.setId(resource.getId());
+            List<FileData> fileData = fileDataMapper.findAllByUuid(resource.getResourceFileId());
+            if (fileData != null) {
+                getResourceFileListDTO.setFileData(fileData);
+            } else {
+                getResourceFileListDTO.setFileData(List.of());
+            }
+
+            return getResourceFileListDTO;
+        }).collect(Collectors.toList());
     }
 
 //    @Override

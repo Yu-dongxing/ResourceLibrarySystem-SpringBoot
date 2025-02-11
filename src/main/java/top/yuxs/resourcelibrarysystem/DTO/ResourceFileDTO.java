@@ -1,2 +1,12 @@
-package top.yuxs.resourcelibrarysystem.DTO;public class ResourceFileDTO {
+package top.yuxs.resourcelibrarysystem.DTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+@Data
+public class ResourceFileDTO {
+    private String name;
+    private String author;
+    private String tab;
+    private String img;
+    private String resourceFileId;
 }

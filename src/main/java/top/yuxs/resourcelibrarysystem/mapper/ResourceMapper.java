@@ -7,8 +7,8 @@ import java.util.List;
 @Mapper
 public interface ResourceMapper {
     
-    @Insert("INSERT INTO resource_list (name, url, create_time, author, tab, img, update_time) " +
-            "VALUES (#{name}, #{url}, #{createTime}, #{author}, #{tab}, #{img}, #{updateTime})")
+    @Insert("INSERT INTO resource_list (name, url, create_time, author, tab, img, update_time,resource_file_id) " +
+            "VALUES (#{name}, #{url}, #{createTime}, #{author}, #{tab}, #{img}, #{updateTime},#{resourceFileId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Resource resource);
     

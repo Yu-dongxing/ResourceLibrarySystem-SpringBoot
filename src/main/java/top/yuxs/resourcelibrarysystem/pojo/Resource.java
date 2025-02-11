@@ -24,6 +24,7 @@ public class Resource {
     private String author;
     private String tab;
     private String img;
+    private String resourceFileId;
     @JsonIgnore
     private int isDeleted;
     public interface Update extends Default {
