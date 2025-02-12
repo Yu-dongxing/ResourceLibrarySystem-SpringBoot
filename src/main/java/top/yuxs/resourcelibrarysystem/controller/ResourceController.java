@@ -48,59 +48,62 @@ public class ResourceController {
     //资源库管理类接口
     //资源文件类型添加
     @PostMapping("/admin/add")
-    public Result<String> addFileResource(@RequestPart("file") MultipartFile file, @RequestPart("resourceData") String resourceData) throws IOException {
+    public Result<String> addFileResource(@RequestPart("files") List<MultipartFile> files, @RequestPart("resourceData") String resourceData) throws IOException {
         String username = (String) StpUtil.getExtra("username");
-//        解析文件数据
-        FileData fileData = new FileData();
-        Long fileSize = file.getSize();
-        //文件原始文件名
-        String fileName = file.getOriginalFilename();
-        //获取文件后缀名
-        String fileExtension = getFileExtension(fileName);
-        //文件上传后的文件名
-        String uuidFileName = UUID.randomUUID().toString() + fileExtension;
-        //获取当前日期时间
-        LocalDateTime now = LocalDateTime.now();
-        //定义日期时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        //定义文件路径
-        String remotePath = "/"+now.format(formatter);
-        String filePath=remotePath+"/"+uuidFileName;
-        //完整文件路径
-        String fileUrl = url+remotePath+"/"+uuidFileName;
-        String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
-//        解析资源数据
+
         ObjectMapper objectMapper = new ObjectMapper();
-        ResourceFileDTO data = objectMapper.readValue(resourceData,ResourceFileDTO.class);
+        ResourceFileDTO data = objectMapper.readValue(resourceData, ResourceFileDTO.class);
         data.setResourceFileId(String.valueOf(UUID.randomUUID()));
+
         try {
-            resourceService.addFileResource(data,username);
-            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(),3);
-            if(success){
-                fileData.setFileName(fileName);
-                fileData.setFilePath(remotePath);
-                fileData.setFileUrl(fileUrl);
-                fileData.setFileMd5(md5);
-                fileData.setUploadTime(LocalDateTime.now());
-                fileData.setResourceId(data.getResourceFileId());
-                fileData.setUserName(username);
-                fileData.setFileType(fileExtension);
-                fileData.setFileSize(fileSize);
-                fileData.setIsDeleted(0);
-                fileData.setUuidFileName(uuidFileName);
-                fileDataService.add(fileData);
-                log.info("上传成功:"+fileUrl+"原始文件名"+fileName);
-                return Result.success("上传成功:"+fileUrl+"原始文件名"+fileName);
-            }else {
-                log.error("上传失败");
-                return Result.error("上传失败");
+            resourceService.addFileResource(data, username);
+
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) {
+                    continue; // 跳过空文件
+                }
+
+                // 解析文件数据
+                FileData fileData = new FileData();
+                Long fileSize = file.getSize();
+                String fileName = file.getOriginalFilename();
+                String fileExtension = getFileExtension(fileName);
+                String uuidFileName = UUID.randomUUID().toString() + fileExtension;
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                String remotePath = "/" + now.format(formatter);
+                String filePath = remotePath + "/" + uuidFileName;
+                String fileUrl = url + filePath;
+                String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
+
+                // 上传文件到FTP
+                boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(), 3);
+                if (success) {
+                    fileData.setFileName(fileName);
+                    fileData.setFilePath(remotePath);
+                    fileData.setFileUrl(fileUrl);
+                    fileData.setFileMd5(md5);
+                    fileData.setUploadTime(LocalDateTime.now());
+                    fileData.setResourceId(data.getResourceFileId());
+                    fileData.setUserName(username);
+                    fileData.setFileType(fileExtension);
+                    fileData.setFileSize(fileSize);
+                    fileData.setIsDeleted(0);
+                    fileData.setUuidFileName(uuidFileName);
+                    fileDataService.add(fileData);
+                    log.info("上传成功: " + fileUrl + " 原始文件名: " + fileName);
+                } else {
+                    log.error("上传失败: " + fileName);
+                    return Result.error("部分文件上传失败");
+                }
             }
+
+            return Result.success("所有文件上传成功");
+
         } catch (IOException e) {
+            log.error("上传异常: " + e.getMessage(), e);
             return Result.error("上传异常: " + e.getMessage());
         }
-
-//        resourceService.addFileResource(data,username);
-//        return Result.success("文件类型添加成功！！");
     }
 
     //资源库逻辑删除接口
@@ -161,6 +164,13 @@ public class ResourceController {
     @GetMapping("/public/get/{id}")
     public Result<Resource> selectByID(@PathVariable long id){
         Resource cs = resourceService.selectById(id);
+        return Result.success(cs);
+    }
+
+    //    根据id查询资源接口
+    @GetMapping("/public/get/resourcefile/{id}")
+    public Result<GetResourceFileListDTO> selectResourceFileByID(@PathVariable long id){
+        GetResourceFileListDTO cs = resourceService.selectResourceFileByID(id);
         return Result.success(cs);
     }
     // 综合搜索接口

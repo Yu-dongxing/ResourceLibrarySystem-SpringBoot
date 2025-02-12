@@ -32,4 +32,6 @@ public interface ResourceService {
     void addFileResource(ResourceFileDTO data,String name);
 
     List<GetResourceFileListDTO> resourceFileList();
+
+    GetResourceFileListDTO selectResourceFileByID(long id);
 }

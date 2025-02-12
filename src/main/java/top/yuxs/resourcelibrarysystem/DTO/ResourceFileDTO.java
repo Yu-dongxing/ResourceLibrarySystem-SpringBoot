@@ -8,5 +8,6 @@ public class ResourceFileDTO {
     private String author;
     private String tab;
     private String img;
+    private String url;
     private String resourceFileId;
 }

@@ -1,6 +1,7 @@
 package top.yuxs.resourcelibrarysystem.mapper;
 
 import org.apache.ibatis.annotations.*;
+import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface ResourceMapper {
     
     @Select("SELECT * FROM resource_list WHERE id = #{id} AND is_deleted = 0")
     Resource findById(Long id);
+
+    GetResourceFileListDTO selectResourceFileByID(Long id);
     
     @Select("SELECT * FROM resource_list WHERE is_deleted = 0 AND is_audit = 1 ORDER BY update_time DESC")
     List<Resource> findAll();
