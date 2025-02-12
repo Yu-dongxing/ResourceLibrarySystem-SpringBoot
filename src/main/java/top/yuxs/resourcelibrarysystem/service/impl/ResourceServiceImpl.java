@@ -152,6 +152,7 @@ public class ResourceServiceImpl  implements ResourceService {
         getResourceFileListDTO.setName(resource.getName());
         getResourceFileListDTO.setUpdateTime(resource.getUpdateTime());
         getResourceFileListDTO.setTab(resource.getTab());
+        getResourceFileListDTO.setUrl(resource.getUrl());
         getResourceFileListDTO.setImg(resource.getImg());
         getResourceFileListDTO.setAuthor(resource.getAuthor());
         getResourceFileListDTO.setCreateTime(resource.getCreateTime());
