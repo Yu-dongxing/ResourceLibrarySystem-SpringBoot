@@ -112,8 +112,8 @@ public class ResourceServiceImpl  implements ResourceService {
         resource.setResourceFileId(data.getResourceFileId());
         resource.setImg(data.getImg());
         resource.setName(data.getName());
-        resource.setUrl("null");
-        resource.setTab(data.getTab());
+        resource.setUrl(data.getUrl());
+        resource.setTab("文件");
         resource.setAuthor(name);
         resource.setUpdateTime(LocalDateTime.now());
         resource.setCreateTime(LocalDateTime.now());
@@ -142,6 +142,23 @@ public class ResourceServiceImpl  implements ResourceService {
 
             return getResourceFileListDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public GetResourceFileListDTO selectResourceFileByID(long id) {
+        Resource resource = resourceMapper.findById(id);
+        GetResourceFileListDTO getResourceFileListDTO = new GetResourceFileListDTO();
+        getResourceFileListDTO.setId(resource.getId());
+        getResourceFileListDTO.setName(resource.getName());
+        getResourceFileListDTO.setUpdateTime(resource.getUpdateTime());
+        getResourceFileListDTO.setTab(resource.getTab());
+        getResourceFileListDTO.setImg(resource.getImg());
+        getResourceFileListDTO.setAuthor(resource.getAuthor());
+        getResourceFileListDTO.setCreateTime(resource.getCreateTime());
+        getResourceFileListDTO.setResourceFileId(resource.getResourceFileId());
+        List<FileData> fileData = fileDataMapper.findAllByUuid(resource.getResourceFileId());
+        getResourceFileListDTO.setFileData(fileData);
+        return getResourceFileListDTO;
     }
 
 //    @Override

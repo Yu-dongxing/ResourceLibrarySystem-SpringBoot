@@ -4,6 +4,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -15,6 +16,17 @@ import static cn.dev33.satoken.SaManager.log;
 
 @Component
 public class FtpUtil {
+    @Value("${ftp.host}")
+    private String host;
+
+    @Value("${ftp.port}")
+    private int port;
+
+    @Value("${ftp.username}")
+    private String username;
+
+    @Value("${ftp.password}")
+    private String password;
 
     @Autowired
     private FTPClient ftpClient;
@@ -138,12 +150,12 @@ public class FtpUtil {
             return; // 如果已经连接，则直接返回
         }
         // 在这里添加FTP服务器的连接逻辑，例如：
-        ftpClient.connect("ftp.example.com", 21); // 替换为实际的FTP服务器地址和端口
+        ftpClient.connect(host,port); // 替换为实际的FTP服务器地址和端口
         int replyCode = ftpClient.getReplyCode();
         if (!FTPReply.isPositiveCompletion(replyCode)) {
             throw new IOException("FTP服务器连接失败，响应码：" + replyCode);
         }
-        ftpClient.login("username", "password"); // 替换为实际的用户名和密码
+        ftpClient.login(username, password); // 替换为实际的用户名和密码
         ftpClient.enterLocalPassiveMode(); // 使用被动模式
     }
 }
