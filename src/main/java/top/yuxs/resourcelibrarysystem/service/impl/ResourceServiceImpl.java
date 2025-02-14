@@ -3,6 +3,7 @@ package top.yuxs.resourcelibrarysystem.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceCompleteUpdateDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.mapper.FileDataMapper;
@@ -160,6 +161,11 @@ public class ResourceServiceImpl  implements ResourceService {
         List<FileData> fileData = fileDataMapper.findAllByUuid(resource.getResourceFileId());
         getResourceFileListDTO.setFileData(fileData);
         return getResourceFileListDTO;
+    }
+
+    @Override
+    public void completeUpdate(Long id, ResourceCompleteUpdateDTO updateData, String username) {
+
     }
 
 //    @Override

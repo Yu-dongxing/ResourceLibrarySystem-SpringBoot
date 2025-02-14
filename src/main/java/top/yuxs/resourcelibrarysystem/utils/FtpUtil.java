@@ -158,4 +158,26 @@ public class FtpUtil {
         ftpClient.login(username, password); // 替换为实际的用户名和密码
         ftpClient.enterLocalPassiveMode(); // 使用被动模式
     }
+
+    /**
+     * 更新FTP服务器上的文件
+     * @param oldPath 旧文件路径
+     * @param oldFileName 旧文件名
+     * @param newPath 新文件路径
+     * @param newFileName 新文件名
+     * @param inputStream 新文件输入流
+     * @return 是否更新成功
+     */
+    public boolean updateFile(String oldPath, String oldFileName, 
+                             String newPath, String newFileName, 
+                             InputStream inputStream, int retryTimes) throws IOException {
+        // 先删除旧文件
+        boolean deleteSuccess = deleteFile(oldPath, oldFileName);
+        if (!deleteSuccess) {
+            return false;
+        }
+        
+        // 上传新文件
+        return uploadFile(newPath, newFileName, inputStream, retryTimes);
+    }
 }

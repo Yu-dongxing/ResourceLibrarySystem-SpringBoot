@@ -3,6 +3,7 @@ package top.yuxs.resourcelibrarysystem.service;
 import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceCompleteUpdateDTO;
 import top.yuxs.resourcelibrarysystem.pojo.Resource;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface ResourceService {
     List<GetResourceFileListDTO> resourceFileList();
 
     GetResourceFileListDTO selectResourceFileByID(long id);
+
+    void completeUpdate(Long id, ResourceCompleteUpdateDTO updateData, String username);
 }

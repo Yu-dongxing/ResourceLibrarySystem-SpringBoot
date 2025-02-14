@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static cn.dev33.satoken.SaManager.log;
@@ -37,31 +39,47 @@ public class FtpController {
     private FileDataService fileDataService;
 
     @PostMapping("/upload")
-    public Result<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("resourceId") String resourceId) {
-        FileData fileData = new FileData();
-
+    public Result<List<String>> upload(@RequestPart("files") List<MultipartFile> files, @RequestParam("resourceId") String resourceId) {
+        List<String> resultMessages = new ArrayList<>();
         String username = (String) StpUtil.getExtra("username");
-//
+
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                resultMessages.add("文件为空，跳过上传");
+                continue; // 跳过空文件
+            }
+            try {
+                String result = uploadFile(file, resourceId, username);
+                resultMessages.add(result);
+            } catch (Exception e) {
+                resultMessages.add("文件上传异常: " + e.getMessage());
+                log.error("文件上传异常: ", e);
+            }
+        }
+
+        if (resultMessages.isEmpty()) {
+            return Result.error("没有文件被上传");
+        } else {
+            return Result.success(resultMessages);
+        }
+    }
+
+    private String uploadFile(MultipartFile file, String resourceId, String username) throws IOException {
         Long fileSize = file.getSize();
-        //文件原始文件名
         String fileName = file.getOriginalFilename();
-        //获取文件后缀名
         String fileExtension = getFileExtension(fileName);
-        //文件上传后的文件名
         String uuidFileName = UUID.randomUUID().toString() + fileExtension;
-        //获取当前日期时间
         LocalDateTime now = LocalDateTime.now();
-        //定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        //定义文件路径
-        String remotePath = "/"+now.format(formatter);
-        String filePath=remotePath+"/"+uuidFileName;
-        //完整文件路径
-        String fileUrl = url+remotePath+"/"+uuidFileName;
+        String remotePath = "/" + now.format(formatter);
+        String filePath = remotePath + "/" + uuidFileName;
+        String fileUrl = url + filePath;
+
         try {
             String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
-            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(),3);
-            if(success){
+            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(), 3);
+            if (success) {
+                FileData fileData = new FileData();
                 fileData.setFileName(fileName);
                 fileData.setFilePath(remotePath);
                 fileData.setFileUrl(fileUrl);
@@ -74,16 +92,18 @@ public class FtpController {
                 fileData.setIsDeleted(0);
                 fileData.setUuidFileName(uuidFileName);
                 fileDataService.add(fileData);
-                log.info("上传成功:"+fileUrl+"原始文件名"+fileName);
-                return Result.success("上传成功:"+fileUrl+"原始文件名"+fileName);
-            }else {
-                log.error("上传失败");
-                return Result.error("上传失败");
+                log.info("上传成功: " + fileUrl + " 原始文件名: " + fileName);
+                return "上传成功: " + fileUrl + " 原始文件名: " + fileName;
+            } else {
+                log.error("文件上传失败: " + fileName);
+                return "文件上传失败: " + fileName;
             }
-        } catch (IOException e) {
-            return Result.error("上传异常: " + e.getMessage());
+        } finally {
+            file.getInputStream().close(); // 确保关闭输入流
         }
     }
+
+
     @DeleteMapping("/delete")
     public Result<String> deleteFile(@RequestParam("fileId") Long fileId) {
         try {
