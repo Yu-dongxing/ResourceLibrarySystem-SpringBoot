@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface UpdateLogMapper {
     // 查询所有日志
-    @Select("SELECT * FROM update_log")
+    @Select("SELECT * FROM update_log ORDER BY log_creat_time DESC")
     List<UpdateLog> findAll();
 
     // 根据ID查询日志
@@ -25,5 +25,5 @@ public interface UpdateLogMapper {
 
     // 删除日志
     @Delete("DELETE FROM update_log WHERE log_id = #{logId}")
-    int deleteById(@Param("logId") Integer logId);
+    void deleteById(@Param("logId") Integer logId);
 }

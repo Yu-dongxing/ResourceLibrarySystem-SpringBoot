@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/resources")
 public class UpdateLogController {
-
     @Autowired
     private UpdateLogService updateLogService;
 //    添加更新日志
@@ -22,7 +21,7 @@ public class UpdateLogController {
         return Result.success("添加成功！");
     }
 //    查询所有更新日志
-    @GetMapping("/updatelog/all")
+    @GetMapping("/public/updatelog/all")
     public Result<List<UpdateLog>> getAll(){
         List<UpdateLog> cs = updateLogService.getAll();
         return Result.success(cs);

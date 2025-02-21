@@ -1,6 +1,7 @@
 package top.yuxs.resourcelibrarysystem.interceptor;
 
 import cn.dev33.satoken.stp.StpUtil;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -15,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import top.yuxs.resourcelibrarysystem.utils.IPUtils;
 
 import java.util.List;
-
+@Log4j2
 @Component
 public class PermissionInterceptor implements HandlerInterceptor {
     
@@ -26,11 +27,11 @@ public class PermissionInterceptor implements HandlerInterceptor {
 //    private IPUtils ipUtils;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!(handler instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
 //        ipUtils.getIpAddr(request);
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        log.info(request);
         RequiresPermission requiresPermission = handlerMethod.getMethodAnnotation(RequiresPermission.class);
         
         if (requiresPermission == null) {

@@ -1,8 +1,8 @@
 package top.yuxs.resourcelibrarysystem.config;
 
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,21 +33,57 @@ public class FtpConfig {
 
     @Value("${ftp.connect-timeout}")
     private int connectTimeout;
-//ftpUtil.setConnectTimeout(60000); // 设置连接超时时间为60秒
-//ftpUtil.setDataTimeout(60000);    // 设置数据传输超时时间为60秒
+
+    @Value("${ftp.data-timeout}")
+    private int dataTimeout;
+
+    @Value("${ftp.buffer-size}")
+    private int bufferSize; // Add buffer size configuration
+
     @Bean
     public FTPClient ftpClient() throws IOException {
         FTPClient ftpClient = new FTPClient();
         ftpClient.setConnectTimeout(connectTimeout);
-        ftpClient.connect(host, port);
-        ftpClient.login(username, password);
-        ftpClient.setControlEncoding(encoding);
-        ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-        log.info("we");
-        if (passiveMode) {
-            ftpClient.enterLocalPassiveMode();
+        try {
+            ftpClient.connect(host, port);
+
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+                log.error("FTP server refused connection.");
+                throw new IOException("FTP server refused connection.");
+            }
+
+            if (!ftpClient.login(username, password)) {
+                ftpClient.disconnect();
+                log.error("FTP server authentication failed.");
+                throw new IOException("FTP server authentication failed.");
+            }
+
+            ftpClient.setControlEncoding(encoding);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.setDataTimeout(dataTimeout);
+            ftpClient.setBufferSize(bufferSize);  // Set buffer size for faster transfers
+
+            if (passiveMode) {
+                ftpClient.enterLocalPassiveMode();
+                log.info("FTP Client using Passive Mode");
+            } else {
+                log.info("FTP Client using Active Mode");
+            }
+            log.info("FTP Client connected to {}:{}", host, port);
+
+        } catch (IOException e) {
+            log.error("Error connecting to FTP server: {}", e.getMessage());
+            if (ftpClient.isConnected()) {
+                try {
+                    ftpClient.disconnect();
+                } catch (IOException f) {
+                    log.error("Error disconnecting from FTP server: {}", f.getMessage());
+                }
+            }
+            throw e;
         }
-        log.info(String.valueOf(passiveMode));
         return ftpClient;
     }
 }

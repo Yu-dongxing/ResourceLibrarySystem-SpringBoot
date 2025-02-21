@@ -77,7 +77,7 @@ public class FtpController {
 
         try {
             String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
-            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(), 3);
+            boolean success = ftpUtil.uploadFile(remotePath, uuidFileName, file.getInputStream(),3,500000);
             if (success) {
                 FileData fileData = new FileData();
                 fileData.setFileName(fileName);
@@ -98,6 +98,8 @@ public class FtpController {
                 log.error("文件上传失败: " + fileName);
                 return "文件上传失败: " + fileName;
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
             file.getInputStream().close(); // 确保关闭输入流
         }
