@@ -3,6 +3,7 @@ package top.yuxs.resourcelibrarysystem.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.yuxs.resourcelibrarysystem.DTO.GetResourceFileListDTO;
+import top.yuxs.resourcelibrarysystem.DTO.ResourceCompleteUpdateDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceFileDTO;
 import top.yuxs.resourcelibrarysystem.DTO.ResourceUpdateDto;
 import top.yuxs.resourcelibrarysystem.mapper.FileDataMapper;
@@ -111,6 +112,7 @@ public class ResourceServiceImpl  implements ResourceService {
         Resource resource = new Resource();
         resource.setResourceFileId(data.getResourceFileId());
         resource.setImg(data.getImg());
+        resource.setDesc(data.getDesc());
         resource.setName(data.getName());
         resource.setUrl(data.getUrl());
         resource.setTab("文件");
@@ -130,9 +132,11 @@ public class ResourceServiceImpl  implements ResourceService {
             getResourceFileListDTO.setUrl(resource.getUrl());
             getResourceFileListDTO.setAuthor(resource.getAuthor());
             getResourceFileListDTO.setTab(resource.getTab());
+            getResourceFileListDTO.setDesc(resource.getDesc());
             getResourceFileListDTO.setUpdateTime(resource.getUpdateTime());
             getResourceFileListDTO.setCreateTime(resource.getCreateTime());
             getResourceFileListDTO.setId(resource.getId());
+            getResourceFileListDTO.setResourceFileId(resource.getResourceFileId());
             List<FileData> fileData = fileDataMapper.findAllByUuid(resource.getResourceFileId());
             if (fileData != null) {
                 getResourceFileListDTO.setFileData(fileData);
@@ -157,9 +161,15 @@ public class ResourceServiceImpl  implements ResourceService {
         getResourceFileListDTO.setAuthor(resource.getAuthor());
         getResourceFileListDTO.setCreateTime(resource.getCreateTime());
         getResourceFileListDTO.setResourceFileId(resource.getResourceFileId());
+        getResourceFileListDTO.setDesc(resource.getDesc());
         List<FileData> fileData = fileDataMapper.findAllByUuid(resource.getResourceFileId());
         getResourceFileListDTO.setFileData(fileData);
         return getResourceFileListDTO;
+    }
+
+    @Override
+    public void completeUpdate(Long id, ResourceCompleteUpdateDTO updateData, String username) {
+
     }
 
 //    @Override

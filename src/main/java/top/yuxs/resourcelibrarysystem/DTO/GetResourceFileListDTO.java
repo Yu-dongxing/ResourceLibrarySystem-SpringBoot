@@ -22,6 +22,7 @@ public class GetResourceFileListDTO {
     private String author;
     private String tab;
     private String img;
+    private String desc;
     private String resourceFileId;
     private List<FileData> fileData;
 }

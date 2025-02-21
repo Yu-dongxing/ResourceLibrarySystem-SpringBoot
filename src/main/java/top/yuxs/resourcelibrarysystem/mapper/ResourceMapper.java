@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface ResourceMapper {
     
-    @Insert("INSERT INTO resource_list (name, url, create_time, author, tab, img, update_time,resource_file_id) " +
-            "VALUES (#{name}, #{url}, #{createTime}, #{author}, #{tab}, #{img}, #{updateTime},#{resourceFileId})")
+    @Insert("INSERT INTO resource_list (name, url, create_time, author, tab, img, update_time,resource_file_id,`desc`) " +
+            "VALUES (#{name}, #{url}, #{createTime}, #{author}, #{tab}, #{img}, #{updateTime},#{resourceFileId},#{desc})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Resource resource);
     
@@ -61,7 +61,7 @@ public interface ResourceMapper {
 
     @Update("UPDATE resource_list SET name = #{name}, url = #{url}, " +
             "update_time = #{updateTime}, author = #{author}, " +
-            "tab = #{tab}, img = #{img} WHERE id = #{id} AND is_deleted = 0")
+            "tab = #{tab}, img = #{img} ,`desc` = #{desc} WHERE id = #{id} AND is_deleted = 0")
     void update(Resource resource);
     
     @Update("UPDATE resource_list SET is_deleted = 1 WHERE id = #{id}")

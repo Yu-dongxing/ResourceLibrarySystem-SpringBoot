@@ -34,7 +34,7 @@ public class RoleController {
 
     // 创建角色
     @PostMapping("/roles")
-    public Result<String> createRole(@RequestBody @Valid RoleCreateDTO roleDTO) {
+    public  Result  createRole(@RequestBody @Valid RoleCreateDTO roleDTO) {
         try {
             roleService.createRole(roleDTO);
             return Result.success("角色创建成功");
