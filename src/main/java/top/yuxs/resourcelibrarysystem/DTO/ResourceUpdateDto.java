@@ -15,4 +15,5 @@ public class ResourceUpdateDto {
     private String author;
     private String tab;
     private String img;
+    private String desc;
 }
