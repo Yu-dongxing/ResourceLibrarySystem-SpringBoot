@@ -47,7 +47,7 @@ public class ResourceServiceImpl  implements ResourceService {
             throw new RuntimeException("资源不存在");
         }else {
             resource.setUpdateTime(LocalDateTime.now());
-
+            resource.setDesc(resourceUpdateDto.getDesc());
             resource.setImg(resourceUpdateDto.getImg());
             resource.setName(resourceUpdateDto.getName());
             resource.setAuthor(name);
