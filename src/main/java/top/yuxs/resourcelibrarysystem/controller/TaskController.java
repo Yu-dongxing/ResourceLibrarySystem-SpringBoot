@@ -104,4 +104,10 @@ public class TaskController {
         List<TaskUserFinish> cs = taskUserFinishService.findAllByTaskId(taskid);
         return Result.success(cs);
     }
+//    根据回答id删除回答
+    @DeleteMapping("/task/finish/delete/{id}")
+    Result<String> deleteByFinish(@PathVariable Long id){
+        taskUserFinishService.deleteByFinishId(id);
+        return Result.success("删除成功");
+    }
 }
