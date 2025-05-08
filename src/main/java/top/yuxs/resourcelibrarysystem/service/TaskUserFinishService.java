@@ -15,4 +15,6 @@ public interface TaskUserFinishService {
     void deleteById(Long id);
 
     List<TaskUserFinish> findAllByTaskId(Long taskid);
+
+    void deleteByFinishId(Long id);
 }

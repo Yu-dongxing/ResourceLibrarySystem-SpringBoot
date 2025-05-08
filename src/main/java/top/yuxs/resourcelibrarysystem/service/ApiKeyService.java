@@ -10,4 +10,8 @@ public interface ApiKeyService {
     List<ApiKey> findByUserId(Long userid);
 
     List<ApiKey> findByAll();
+
+    ApiKey findByKey(String apikey);
+
+    Boolean isKey(String apikey);
 }

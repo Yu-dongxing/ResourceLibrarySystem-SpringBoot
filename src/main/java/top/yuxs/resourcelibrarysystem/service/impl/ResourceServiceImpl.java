@@ -55,7 +55,6 @@ public class ResourceServiceImpl  implements ResourceService {
             resource.setTab(resourceUpdateDto.getTab());
             resourceMapper.update(resource);
         }
-
     }
 
     @Override
