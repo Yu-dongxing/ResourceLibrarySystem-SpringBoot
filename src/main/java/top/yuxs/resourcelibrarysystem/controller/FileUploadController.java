@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.yuxs.resourcelibrarysystem.pojo.FileData;
 import top.yuxs.resourcelibrarysystem.pojo.Result;
+import top.yuxs.resourcelibrarysystem.service.ApiKeyService;
 import top.yuxs.resourcelibrarysystem.service.FileDataService;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
 import top.yuxs.resourcelibrarysystem.utils.FtpUtil;
@@ -37,13 +38,47 @@ public class FileUploadController {
     private FileDataService fileDataService;
     @Autowired
     private ResourceService resourceService;
+    @Autowired
+    private ApiKeyService apiKeyService;
     // 获取项目根目录路径
     private String uploadDir = System.getProperty("user.dir") + "/uploads/";
 
-    //资源文件类型添加
+    //获取所有文件信息
+    @GetMapping("/file/all")
+    public Result<List<FileData>> findAll(){
+        List<FileData> cs = fileDataService.findAll();
+        return Result.success("所有文件查询成功！",cs);
+
+    }
+
+    //  文件上传 -- v1.0 （分片上传）
+    @PostMapping("/file/upload/chunk")
+    public Result<String> uploadFileChunk(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("chunkNumber") int chunkNumber,
+            @RequestParam("totalChunks") int totalChunks,
+            @RequestParam("fileMd5") String fileMd5,
+            @RequestParam("fileName") String fileName,
+            @RequestParam("FileAssociationId") String FileAssociationId
+    ) throws IOException {
+        fileDataService.saveChunk(file,fileMd5,FileAssociationId, fileName, chunkNumber, totalChunks);
+        return Result.success("分片上传成功！");
+    }
+    //   文件上传 -- v1.0 （接受合并请求）
+    @PostMapping("/file/upload/chunk/merge")
+    public  Result<String> uploadFileChunkMerge(
+            @RequestParam("fileName") String fileName,
+            @RequestParam("fileMd5") String fileMd5,
+            @RequestParam("FileAssociationId") String FileAssociationId,
+            @RequestParam("totalChunks") int totalChunks
+    ) throws IOException {
+        fileDataService.mergeChunksAndUpload(fileMd5, fileName, FileAssociationId,totalChunks);
+        return Result.success("上传成功！");
+    }
+
+    //编辑器图片上传
     @PostMapping("/public/fileupload/{key}")
     public Map<String,Object> addFileResource(@RequestPart("file") MultipartFile file, @PathVariable String key) throws IOException, InterruptedException {
-        // 解析文件数据
         log.info(key);
         String fileName = file.getOriginalFilename();
         String fileExtension = getFileExtension(fileName,true);
@@ -79,6 +114,7 @@ public class FileUploadController {
         return Result.success(cs);
     }
 
+//    文件上传 - 0.1
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -139,14 +175,4 @@ public class FileUploadController {
         }
         return "";
     }
-    /**
-     * 解析文件数据 并且 放入数据库中
-     *
-     */
-//    private ResourceFileDTO getFileDataBy(MultipartFile file){
-//        ResourceFileDTO resourceFileDTO = new ResourceFileDTO();
-//
-//        return resourceFileDTO;
-//    }
-
 }

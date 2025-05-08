@@ -3,6 +3,7 @@ package top.yuxs.resourcelibrarysystem.controller;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,13 @@ import top.yuxs.resourcelibrarysystem.pojo.Users;
 import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
+import top.yuxs.resourcelibrarysystem.service.UserLoginLogService;
 import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
 import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 import top.yuxs.resourcelibrarysystem.annotation.RequiresPermission;
+import top.yuxs.resourcelibrarysystem.utils.IPUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +28,10 @@ import java.util.Objects;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserLoginLogService userLoginLogService;
+    @Autowired
+    private IPUtils ipUtils;
     
     //注册接口（待修改）
     @PostMapping("/sign")
@@ -42,7 +49,7 @@ public class UserController {
     }
     //登录接口
     @PostMapping("/login")
-    public Result<String> login(String phoneNumber, String password) {
+    public Result<String> login(String phoneNumber, String password, HttpServletRequest request) {
         Users loginUser = userService.findPhoneNumber(phoneNumber);
         //判断用户是否存在
         if(loginUser == null) {
@@ -60,6 +67,11 @@ public class UserController {
                     .setExtra("role", roleName));  // 添加角色信息
                     
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            String ipAdder = ipUtils.getIpAddr(request);
+            Long userId = StpUtil.getLoginIdAsLong();
+            String userName = (String) StpUtil.getExtra("username");
+
+            userLoginLogService.AddUserLoginLog(userId,userName,request,ipAdder);
             return Result.success(tokenInfo.tokenValue);
         } else {
             return Result.error("密码错误，请重新输入");
