@@ -2,6 +2,7 @@ package top.yuxs.resourcelibrarysystem.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import top.yuxs.resourcelibrarysystem.pojo.Result;
 import top.yuxs.resourcelibrarysystem.service.FileDataService;
 import top.yuxs.resourcelibrarysystem.service.ResourceService;
 import top.yuxs.resourcelibrarysystem.utils.FtpUtil;
+import top.yuxs.resourcelibrarysystem.utils.SysOperLogUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -42,6 +44,9 @@ public class ResourceController {
 
     @Autowired
     private ResourceService resourceService;
+
+    @Autowired
+    private SysOperLogUtil sysOperLogUtil;
     //资源库管理类接口
 
 //    资源文件类型添加修改后接口**********************************************************************
@@ -200,8 +205,22 @@ public class ResourceController {
     }
 //    资源文件类获取
     @GetMapping("/public/get/resourcefile")
-    public Result<List<GetResourceFileListDTO>> resourceFileList(){
+    public Result<List<GetResourceFileListDTO>> resourceFileList(HttpServletRequest request){
         List<GetResourceFileListDTO> cs = resourceService.resourceFileList();
+        sysOperLogUtil.add("获取资源文件数据",
+                0,
+                "GET",
+                "GET",
+                0,
+                "/public/get/resourcefile",
+                "/public/get/resourcefile",
+                "/public/get/resourcefile",
+                "/public/get/resourcefile",
+                " "+cs.toString(),
+                0,
+                "null",
+                request
+                );
         return Result.success(cs);
     }
     //资源库添加接口

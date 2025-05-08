@@ -1,7 +1,6 @@
 package top.yuxs.resourcelibrarysystem.service;
 
 import top.yuxs.resourcelibrarysystem.pojo.IpAccessLog;
-import top.yuxs.resourcelibrarysystem.pojo.PageAccessLog;
 
 import java.util.List;
 

@@ -63,6 +63,19 @@ public class ApiKeyController {
         List<ApiKey> cs = apiKeyService.findByAll();
         return Result.success(cs);
     }
+//    公开查询
+    @GetMapping("/public/apikey/{apikey}")
+    public Result<String> keyContrast(@PathVariable String apikey){
+//        ApiKey  keyInfo  = apiKeyService.findByKey(apikey);
+//        if (ApiKeyUtil.isExpired(keyInfo.getCreatedAt(),keyInfo.getExpiresAt())){
+//            return Result.success("true");
+//        }else {
+//            return Result.error("false");
+//        }
+        Boolean isKey = apiKeyService.isKey(apikey);
+        return Result.success(isKey.toString());
+    }
+
 //    @GetMapping("/apikey/get/es/{key}")
 //    public Result<String> getApiKeyOrUse(@PathVariable String  key){
 //

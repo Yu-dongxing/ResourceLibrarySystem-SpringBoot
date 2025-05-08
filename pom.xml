@@ -125,6 +125,34 @@
             <artifactId>commons-net</artifactId>
             <version>3.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.36</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.baomidou</groupId>-->
+<!--            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>-->
+<!--            <version>3.5.10.1</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; 分页插件模块 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.baomidou</groupId>-->
+<!--            <artifactId>mybatis-plus-jsqlparser</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.10.1</version>
+        </dependency>
+
+        <!-- 新增：SQL 解析器依赖（分页插件需要） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>3.5.10.1</version> <!-- 版本需与核心依赖一致 -->
+        </dependency>
     </dependencies>
 
     <build>

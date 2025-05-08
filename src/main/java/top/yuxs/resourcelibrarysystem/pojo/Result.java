@@ -1,29 +1,106 @@
+//package top.yuxs.resourcelibrarysystem.pojo;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
+//
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Data
+//public class Result<T> {
+//    private Integer code ;      //
+//    private String message;
+//    private T data;
+//
+//    public static <E> Result <E> success(E data){
+//        return new Result<>(200,"操作成功",data);
+//    }
+//    public static <E> Result <E> success(String message,E data){
+//        return new Result<>(200,message,data);
+//    }
+//    public static Result success(){
+//        return new Result(200,"操作成功",null);
+//    }
+//    public static Result error(String message ){
+//        return new Result(400,message,null);
+//    }
+//    public static Result error(int code, String message ){
+//        return new Result(code,message,null);
+//    }
+//
+//}
+//
+
 package top.yuxs.resourcelibrarysystem.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 通用响应结果类
+ *
+ * @param <T> 响应数据的类型
+ */
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Result<T> {
-    private Integer code ;      //
-    private String message;
-    private T data;
 
-    public static <E> Result <E> success(E data){
-        return new Result<>(200,"操作成功",data);
-    }
-    public static Result success(){
-        return new Result(200,"操作成功",null);
-    }
-    public static Result error(String message ){
-        return new Result(400,message,null);
-    }
-    public static Result error(int code, String message ){
-        return new Result(code,message,null);
+    private Integer code;       // 状态码
+    private String message;     // 提示信息
+    private T data;             // 数据
+
+    /**
+     * 成功响应，携带数据
+     *
+     * @param data 响应数据
+     * @param <E>  数据类型
+     * @return Result对象
+     */
+    public static <E> Result<E> success(E data) {
+        return new Result<>(200, "操作成功", data);
     }
 
+    /**
+     * 成功响应，携带自定义消息和数据
+     *
+     * @param message 自定义消息
+     * @param data    响应数据
+     * @param <E>     数据类型
+     * @return Result对象
+     */
+    public static <E> Result<E> success(String message, E data) {
+        return new Result<>(200, message, data);
+    }
+
+    /**
+     * 成功响应，不携带数据
+     *
+     * @return Result对象
+     */
+    public static Result success() {
+        return new Result(200, "操作成功", null);
+    }
+
+    /**
+     * 失败响应，携带自定义消息
+     *
+     * @param message 错误消息
+     * @return Result对象
+     */
+    public static Result error(String message) {
+        return new Result(400, message, null);
+    }
+
+    /**
+     * 失败响应，携带自定义状态码和消息
+     *
+     * @param code    状态码
+     * @param message 错误消息
+     * @return Result对象
+     */
+    public static Result error(int code, String message) {
+        return new Result(code, message, null);
+    }
 }
-
