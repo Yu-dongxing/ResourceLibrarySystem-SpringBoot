@@ -58,4 +58,9 @@ public class TaskUserFinishServiceImpl implements TaskUserFinishService {
     public List<TaskUserFinish> findAllByTaskId(Long taskid) {
         return taskUserFinishMapper.findAllByTaskID(taskid);
     }
+
+    @Override
+    public void deleteByFinishId(Long id) {
+        taskUserFinishMapper.deleteById(id);
+    }
 }
