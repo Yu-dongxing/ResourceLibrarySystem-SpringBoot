@@ -11,7 +11,6 @@ import top.yuxs.resourcelibrarysystem.pojo.Task;
 import top.yuxs.resourcelibrarysystem.pojo.TaskUserFinish;
 import top.yuxs.resourcelibrarysystem.service.TaskService;
 import top.yuxs.resourcelibrarysystem.service.TaskUserFinishService;
-import top.yuxs.resourcelibrarysystem.service.impl.TaskServiceImpl;
 
 import java.util.List;
 @Slf4j
@@ -110,4 +109,7 @@ public class TaskController {
         taskUserFinishService.deleteByFinishId(id);
         return Result.success("删除成功");
     }
+//    管理员文件关联接口
+    //add 任务id，用户id，文件id
+    //get 用户id，任务id =》 文件id
 }
