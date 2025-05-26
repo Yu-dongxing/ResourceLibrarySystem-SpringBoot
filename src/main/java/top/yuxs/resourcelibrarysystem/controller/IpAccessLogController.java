@@ -1,10 +1,8 @@
 package top.yuxs.resourcelibrarysystem.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.yuxs.resourcelibrarysystem.pojo.IpAccessLog;
@@ -31,10 +29,15 @@ public class IpAccessLogController {
         List<IpAccessLog> cs = ipAccessLogService.gatAll();
         return Result.success(cs);
     }
+    //分页查询
+    @GetMapping("/public/ip_log/page")
+    public Result<IPage<IpAccessLog>> getPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        IPage<IpAccessLog> ipAccessLogPage = ipAccessLogService.getPage(pageNum, pageSize);
+        return Result.success(ipAccessLogPage);
+    }
 //    根据ip地址查询日志
     @GetMapping("/public/ip_log/IpAddress/{ip}")
     public Result<IpAccessLog> getByIpAddress(@PathVariable String ip){
-
         IpAccessLog ipAccessLog = ipAccessLogService.getByIpAddress(ip);
         return Result.success(ipAccessLog);
     }

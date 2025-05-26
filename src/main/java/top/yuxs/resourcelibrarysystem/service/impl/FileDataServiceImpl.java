@@ -76,9 +76,10 @@ public class FileDataServiceImpl implements FileDataService{
             MultipartFile file,
             String fileMd5, // 为文件的MD5值
             String FileAssociationId, // 文件关联id
-            String fileName,
-            int chunkNumber,
-            int totalChunks
+            String fileName, //文件名
+            int chunkNumber, //当前分片编号
+            int totalChunks //分片总数
+            //String chunMd5, // 分片MD5值
     ) throws IOException {
         // 使用MD5值作为临时目录名
         String chunkDir = Paths.get(tempDir, fileMd5).toString();

@@ -20,7 +20,6 @@ public class UserLoginLogController {
     private UserLoginLogService userLoginLogService;
     @Autowired
     private IPUtils ipUtils;
-//    添加用户登录日志@RequestBody UserLoginLog userLoginLog,
     @PostMapping("/userloginlog/add")
     Result<String> addUserLoginLog(HttpServletRequest request){
         String userName = (String) StpUtil.getExtra("username");
@@ -35,6 +34,13 @@ public class UserLoginLogController {
     Result<List<UserLoginLog>> findByUserLoginLog(){
         Long userId = StpUtil.getLoginIdAsLong();
         List<UserLoginLog> log = userLoginLogService.findByUser(userId);
+        return Result.success(log);
+    }
+    //    查询用户登录日志（最近n条）
+    @GetMapping("/userloginlog/find/user/{n}")
+    Result<List<UserLoginLog>> findByUserLoginLog(@PathVariable Integer n){
+        Long userId = StpUtil.getLoginIdAsLong();
+        List<UserLoginLog> log = userLoginLogService.findByUserByN(userId,n);
         return Result.success(log);
     }
 }

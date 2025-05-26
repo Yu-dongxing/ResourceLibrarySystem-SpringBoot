@@ -207,20 +207,20 @@ public class ResourceController {
     @GetMapping("/public/get/resourcefile")
     public Result<List<GetResourceFileListDTO>> resourceFileList(HttpServletRequest request){
         List<GetResourceFileListDTO> cs = resourceService.resourceFileList();
-        sysOperLogUtil.add("获取资源文件数据",
-                0,
-                "GET",
-                "GET",
-                0,
-                "/public/get/resourcefile",
-                "/public/get/resourcefile",
-                "/public/get/resourcefile",
-                "/public/get/resourcefile",
-                " "+cs.toString(),
-                0,
-                "null",
-                request
-                );
+//        sysOperLogUtil.add("获取资源文件数据",
+//                0,
+//                "GET",
+//                "GET",
+//                0,
+//                "/public/get/resourcefile",
+//                "/public/get/resourcefile",
+//                "/public/get/resourcefile",
+//                "/public/get/resourcefile",
+//                " "+cs.toString(),
+//                0,
+//                "null",
+//                request
+//                );
         return Result.success(cs);
     }
     //资源库添加接口
@@ -330,7 +330,6 @@ public class ResourceController {
             if (newFiles != null && !newFiles.isEmpty()) {
                 for (MultipartFile file : newFiles) {
                     if (file.isEmpty()) continue;
-                    
                     // 处理新文件上传
                     FileData fileData = new FileData();
                     String fileName = file.getOriginalFilename();
@@ -364,7 +363,6 @@ public class ResourceController {
                     }
                 }
             }
-            
             return Result.success("资源更新成功");
             
         } catch (IOException e) {

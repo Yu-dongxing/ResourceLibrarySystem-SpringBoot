@@ -7,21 +7,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.yuxs.resourcelibrarysystem.pojo.Result;
-import top.yuxs.resourcelibrarysystem.pojo.Users;
-import top.yuxs.resourcelibrarysystem.pojo.Role;
-import top.yuxs.resourcelibrarysystem.pojo.Permission;
+import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
 import top.yuxs.resourcelibrarysystem.DTO.UserDTO;
-import top.yuxs.resourcelibrarysystem.service.UserLoginLogService;
-import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 import top.yuxs.resourcelibrarysystem.DTO.UserUpdateDTO;
-import top.yuxs.resourcelibrarysystem.DTO.PasswordUpdateDTO;
-import top.yuxs.resourcelibrarysystem.annotation.RequiresPermission;
+import top.yuxs.resourcelibrarysystem.pojo.Permission;
+import top.yuxs.resourcelibrarysystem.pojo.Result;
+import top.yuxs.resourcelibrarysystem.pojo.Role;
+import top.yuxs.resourcelibrarysystem.pojo.Users;
+import top.yuxs.resourcelibrarysystem.service.UserLoginLogService;
+import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.utils.IPUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -133,6 +131,7 @@ public class UserController {
             return Result.error(e.getMessage());
         }
     }
+    //忘记密码
 
     // 获取所有用户详细信息
     @GetMapping("/admin/users")

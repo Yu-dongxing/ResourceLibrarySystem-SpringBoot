@@ -54,12 +54,13 @@ public class FileUploadController {
     //  文件上传 -- v1.0 （分片上传）
     @PostMapping("/file/upload/chunk")
     public Result<String> uploadFileChunk(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("chunkNumber") int chunkNumber,
-            @RequestParam("totalChunks") int totalChunks,
-            @RequestParam("fileMd5") String fileMd5,
-            @RequestParam("fileName") String fileName,
-            @RequestParam("FileAssociationId") String FileAssociationId
+            @RequestParam("file") MultipartFile file, //分片文件
+            @RequestParam("chunkNumber") int chunkNumber, //当前分片编号
+            @RequestParam("totalChunks") int totalChunks,//分片总数
+            @RequestParam("fileMd5") String fileMd5,//文件md5
+            @RequestParam("fileName") String fileName,//文件名
+            @RequestParam("FileAssociationId") String FileAssociationId //文件与资源关联id
+            //@RequestParam("chunkMd5") String chunkMd5 // 分片md5
     ) throws IOException {
         fileDataService.saveChunk(file,fileMd5,FileAssociationId, fileName, chunkNumber, totalChunks);
         return Result.success("分片上传成功！");
@@ -71,6 +72,7 @@ public class FileUploadController {
             @RequestParam("fileMd5") String fileMd5,
             @RequestParam("FileAssociationId") String FileAssociationId,
             @RequestParam("totalChunks") int totalChunks
+            //@RequestParam("chunkMd5") String chunkMd5 // 分片md5
     ) throws IOException {
         fileDataService.mergeChunksAndUpload(fileMd5, fileName, FileAssociationId,totalChunks);
         return Result.success("上传成功！");

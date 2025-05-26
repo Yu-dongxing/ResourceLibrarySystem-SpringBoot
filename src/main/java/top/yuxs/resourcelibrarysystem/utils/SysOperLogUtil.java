@@ -45,7 +45,6 @@ public class SysOperLogUtil {
              String jsonResult,
              Integer status,
              String errorMsg,
-
              HttpServletRequest request
     ){
 
@@ -57,7 +56,7 @@ public class SysOperLogUtil {
             syslog.setOperName((String) StpUtil.getExtra("username"));
         }else {
             syslog.setOperUserId(0L);
-            syslog.setOperName("null");
+            syslog.setOperName("访客用户");
         }
         syslog.setTitle(title);
         syslog.setBusinessType(businessType);
