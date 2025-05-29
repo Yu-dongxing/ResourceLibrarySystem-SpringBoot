@@ -18,6 +18,9 @@ public class SysOperLogUtil {
     @Autowired
     private IPUtils ipUtils;
 
+    @Autowired
+    private SysConfigUtil sysConfigUtil;
+
     /**
      * @param title 日志主题
      * @param businessType  业务类型（0其它 1新增 2修改 3删除）
@@ -70,7 +73,12 @@ public class SysOperLogUtil {
         syslog.setOperUrl(operUrl);
         syslog.setOperLocation(operLocation);
         syslog.setJsonResult(jsonResult);
+        String cs = sysConfigUtil.getSysConfigById("isSysLog");
+        if(cs.equals("true")){
+            sysOperLogService.add(syslog);
+        }else {
+            log.info("已关闭系统日志！");
+        }
 
-        sysOperLogService.add(syslog);
     }
 }
