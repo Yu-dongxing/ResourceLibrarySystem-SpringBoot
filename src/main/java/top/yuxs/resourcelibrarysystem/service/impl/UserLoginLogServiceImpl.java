@@ -28,7 +28,7 @@ public class UserLoginLogServiceImpl implements UserLoginLogService {
         userLoginLog.setLoginUserId(userId);
         userLoginLog.setLoginUserAccessLogId(1L);
         String cs = sysConfigUtil.getSysConfigById("isUserLoginLog");
-        if (cs.equals("true")){
+        if (cs != null && cs.equals("true")){
             userLoginLogMapper.add(userLoginLog);
         }else {
             log.info("已关闭用户登录日志！");

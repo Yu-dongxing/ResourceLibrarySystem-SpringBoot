@@ -45,6 +45,12 @@ public class UserController {
             }
         }
     }
+    //注册接口-V2
+    @PostMapping("/sign/v2")
+    public Result<String> registerV2(@RequestBody Users users){
+        userService.registerV2(users);
+        return Result.success("注册成功！");
+    }
     //登录接口
     @PostMapping("/login")
     public Result<String> login(String phoneNumber, String password, HttpServletRequest request) {

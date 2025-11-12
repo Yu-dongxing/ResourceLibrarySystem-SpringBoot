@@ -16,8 +16,11 @@ public class SysConfigUtil {
     //根据id获取系统配置数据
     public String getSysConfigById(String p){
         SysConfig sysConfig = sysConfigService.getById(34);
-        String view = sysConfig.getConfigView();
-        JSONObject jsonObject = JSONUtil.parseObj(view);
-        return jsonObject.get(p).toString();
+        if(sysConfig != null){
+            String view = sysConfig.getConfigView();
+            JSONObject jsonObject = JSONUtil.parseObj(view);
+            return jsonObject.get(p).toString();
+        }
+        return null;
     }
 }

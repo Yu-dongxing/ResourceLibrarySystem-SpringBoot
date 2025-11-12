@@ -40,6 +40,7 @@ public class BookController {
     @GetMapping("/book/delete/{id}")
     public Result<String> deleteById(@PathVariable Long id){
         bookMapper.deleteById(id);
+
         return Result.success("删除成功！");
     }
 }

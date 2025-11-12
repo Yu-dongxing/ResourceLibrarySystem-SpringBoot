@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.yuxs.resourcelibrarysystem.mapper.UserMapper;
+import top.yuxs.resourcelibrarysystem.mapper.UserV2Mapper;
 import top.yuxs.resourcelibrarysystem.pojo.Users;
 import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Permission;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserV2Mapper userV2Mapper;
     
     @Autowired
     private RoleService roleService;
@@ -101,7 +104,7 @@ public class UserServiceImpl implements UserService {
         // 获取用户角色
         List<Role> roles = getUserRoles(userId);
         if (!roles.isEmpty()) {
-            Role primaryRole = roles.get(0); // 获取第一个角色作为主要角色
+            Role primaryRole = roles.getFirst(); // 获取第一个角色作为主要角色
             userDTO.setRoleName(primaryRole.getName());
             userDTO.setRoleId(primaryRole.getId());
         }
@@ -248,5 +251,10 @@ public class UserServiceImpl implements UserService {
         
         // 如果需要更新额外的信息，可以在这里添加
         // 例如更新其他关联表的数据
+    }
+
+    @Override
+    public void registerV2(Users users) {
+        userV2Mapper.insert(users);
     }
 }
