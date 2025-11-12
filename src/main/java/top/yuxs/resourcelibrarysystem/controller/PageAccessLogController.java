@@ -3,11 +3,10 @@ package top.yuxs.resourcelibrarysystem.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.yuxs.resourcelibrarysystem.DTO.PageAccessLogUpdateDTO;
-import top.yuxs.resourcelibrarysystem.DTO.UserRegisterDTO;
 import top.yuxs.resourcelibrarysystem.pojo.PageAccessLog;
 import top.yuxs.resourcelibrarysystem.pojo.Result;
 import top.yuxs.resourcelibrarysystem.service.PageAccessLogService;
+import top.yuxs.resourcelibrarysystem.utils.SysConfigUtil;
 
 import java.util.List;
 
@@ -16,11 +15,20 @@ import java.util.List;
 public class PageAccessLogController {
     @Autowired
     private PageAccessLogService pageAccessLogService;
+    @Autowired
+    private SysConfigUtil sysConfigUtil;
 //    添加日志
     @PostMapping("/public/log/add")
     public Result<String> addLog(@RequestBody @Valid PageAccessLog pageAccessLog) {
-        pageAccessLogService.add(pageAccessLog);
-        return Result.success("添加成功");
+
+        String cs = sysConfigUtil.getSysConfigById("isPageLog");
+        if(cs.equals("true")){
+            pageAccessLogService.add(pageAccessLog);
+            return Result.success("添加成功");
+        }else {
+            return Result.success("已关闭页面日志");
+        }
+
     }
 //    查询所有日志
     @GetMapping("/public/log/all")

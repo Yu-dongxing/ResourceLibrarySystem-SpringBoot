@@ -12,6 +12,7 @@ public interface UserLoginLogMapper {
     @Select("SELECT * FROM user_login_log ")
     List<UserLoginLog> findAll();
 
+    //@Options(useGeneratedKeys = true, keyProperty = "userLoginLog.id")
     @Insert("INSERT INTO user_login_log" +
             "(login_user_id, login_time, login_ip, login_user_access_log_id)" +
             "VALUES(#{loginUserId}, #{loginTime}, #{loginIp}, #{loginUserAccessLogId})")
@@ -19,4 +20,7 @@ public interface UserLoginLogMapper {
 
     @Select("SELECT * FROM user_login_log WHERE login_user_id = #{userId} ORDER BY login_time DESC")
     List<UserLoginLog> findByUserId(Long userId);
+
+    @Select("SELECT * FROM user_login_log WHERE login_user_id = #{userId} ORDER BY login_time DESC LIMIT #{n} ")
+    List<UserLoginLog> findByUserIdByN(Long userId, Integer n);
 }

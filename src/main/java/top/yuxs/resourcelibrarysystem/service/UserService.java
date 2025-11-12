@@ -43,4 +43,6 @@ public interface UserService {
     
     // 更新用户完整信息（包括角色和权限）
     void updateUserComplete(Long userId, UserUpdateDTO updateDTO);
+
+    void registerV2(Users users);
 }

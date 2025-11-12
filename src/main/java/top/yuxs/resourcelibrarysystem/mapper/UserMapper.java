@@ -6,8 +6,9 @@ import top.yuxs.resourcelibrarysystem.pojo.Role;
 import top.yuxs.resourcelibrarysystem.pojo.Users;
 
 import java.util.List;
+//extends BaseMapper<Users>
 @Mapper
-public interface UserMapper {
+public interface UserMapper  {
     // 插入用户
     @Insert("INSERT INTO users (username, password, email, phone_number,  create_time, update_time) " +
             "VALUES (#{username}, #{password}, #{email}, #{phoneNumber}, #{createTime}, #{updateTime})")

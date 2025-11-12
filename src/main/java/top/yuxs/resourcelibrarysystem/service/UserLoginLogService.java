@@ -10,4 +10,6 @@ public interface UserLoginLogService {
     void AddUserLoginLog(Long userId, String userName, HttpServletRequest request, String ipAdder);
 
     List<UserLoginLog> findByUser(Long userId);
+
+    List<UserLoginLog> findByUserByN(Long userId, Integer n);
 }

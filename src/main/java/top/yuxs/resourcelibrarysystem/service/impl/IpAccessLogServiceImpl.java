@@ -1,5 +1,7 @@
 package top.yuxs.resourcelibrarysystem.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.yuxs.resourcelibrarysystem.mapper.IpAccessLogMapper;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class IpAccessLogServiceImpl implements IpAccessLogService {
+public class IpAccessLogServiceImpl  implements IpAccessLogService{
     @Autowired
     private IpAccessLogMapper ipAccessLogMapper;
     @Override
@@ -38,6 +40,15 @@ public class IpAccessLogServiceImpl implements IpAccessLogService {
     @Override
     public IpAccessLog getByIpAddress(String ip) {
         return ipAccessLogMapper.selectByIpAddress(ip);
+    }
+
+    @Override
+    public IPage<IpAccessLog> getPage(Integer pageNum, Integer pageSize) {
+        // 创建分页对象
+        IPage<IpAccessLog> page = new Page<>(pageNum, pageSize);
+        // 执行分页查询
+        IPage<IpAccessLog> ipAccessLogPage = ipAccessLogMapper.selectPage(page, null);
+        return ipAccessLogPage;
     }
 
 
