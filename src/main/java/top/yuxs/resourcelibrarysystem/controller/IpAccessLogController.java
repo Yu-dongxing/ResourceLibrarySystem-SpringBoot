@@ -11,6 +11,10 @@ import top.yuxs.resourcelibrarysystem.service.IpAccessLogService;
 import top.yuxs.resourcelibrarysystem.utils.SysConfigUtil;
 
 import java.util.List;
+
+/**
+ * ip 访问控制器
+ */
 @Log4j2
 @RestController
 @RequestMapping("/api/resources")

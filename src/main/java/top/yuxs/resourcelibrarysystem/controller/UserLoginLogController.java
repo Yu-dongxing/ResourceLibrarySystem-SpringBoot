@@ -12,6 +12,9 @@ import top.yuxs.resourcelibrarysystem.utils.IPUtils;
 
 import java.util.List;
 
+/**
+ * 用户登录日志控制器
+ */
 @RestController
 @Slf4j
 @RequestMapping("${Api-Web-Name.url}")
@@ -20,6 +23,12 @@ public class UserLoginLogController {
     private UserLoginLogService userLoginLogService;
     @Autowired
     private IPUtils ipUtils;
+
+    /**
+     * 添加用户登录日志
+     * @param request
+     * @return
+     */
     @PostMapping("/userloginlog/add")
     Result<String> addUserLoginLog(HttpServletRequest request){
         String userName = (String) StpUtil.getExtra("username");
@@ -29,14 +38,22 @@ public class UserLoginLogController {
         userLoginLogService.AddUserLoginLog(userId,userName,request,ipAdder);
         return Result.success("添加用户登录日志成功！");
     }
-//    查询用户登录日志
+    /**
+     * 查询用户登录日志
+     * @return
+     */
     @GetMapping("/userloginlog/find/user")
     Result<List<UserLoginLog>> findByUserLoginLog(){
         Long userId = StpUtil.getLoginIdAsLong();
         List<UserLoginLog> log = userLoginLogService.findByUser(userId);
         return Result.success(log);
     }
-    //    查询用户登录日志（最近n条）
+
+    /**
+     * 查询用户登录日志（最近n条）
+     * @param n  最近n条
+     * @return
+     */
     @GetMapping("/userloginlog/find/user/{n}")
     Result<List<UserLoginLog>> findByUserLoginLog(@PathVariable Integer n){
         Long userId = StpUtil.getLoginIdAsLong();
