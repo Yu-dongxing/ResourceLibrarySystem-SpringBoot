@@ -8,6 +8,9 @@ import top.yuxs.resourcelibrarysystem.pojo.Result;
 import top.yuxs.resourcelibrarysystem.pojo.SysConfig;
 import top.yuxs.resourcelibrarysystem.service.SysConfigService;
 
+/**
+ * 系统配置控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class sysConfigController {

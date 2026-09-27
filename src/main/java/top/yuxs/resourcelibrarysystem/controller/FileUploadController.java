@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 文件上传控制器
+ */
 @Log4j2
 @RestController
 @RequestMapping("/api/resources")

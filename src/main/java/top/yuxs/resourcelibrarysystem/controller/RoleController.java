@@ -12,6 +12,9 @@ import top.yuxs.resourcelibrarysystem.service.RoleService;
 
 import java.util.List;
 
+/**
+ * 角色控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class RoleController {

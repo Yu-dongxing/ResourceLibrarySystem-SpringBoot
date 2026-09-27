@@ -28,6 +28,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 资源控制器
+ */
 @Log4j2
 @RestController
 @RequestMapping("/api/resources")
@@ -56,6 +59,15 @@ public class ResourceController {
         resourceService.addFileResource(resourceFileDTO,name);
         return Result.success("添加成功！");
     }
+
+    /**
+     *
+     * @param files
+     * @param resourceUUID
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @PostMapping("/admin/add/new/files/{resourceUUID}")
     public Result<String> addFileResourceNewFile(@RequestPart("files") List<MultipartFile> files, @PathVariable String resourceUUID) throws IOException, InterruptedException {
         String name = (String) StpUtil.getExtra("username");

@@ -9,6 +9,9 @@ import top.yuxs.resourcelibrarysystem.service.UpdateLogService;
 
 import java.util.List;
 
+/**
+ * 更新日志控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class UpdateLogController {

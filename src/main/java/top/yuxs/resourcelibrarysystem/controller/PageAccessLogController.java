@@ -10,6 +10,9 @@ import top.yuxs.resourcelibrarysystem.utils.SysConfigUtil;
 
 import java.util.List;
 
+/**
+ * 页面访问日志
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class PageAccessLogController {

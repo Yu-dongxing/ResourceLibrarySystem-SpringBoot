@@ -9,6 +9,9 @@ import top.yuxs.resourcelibrarysystem.service.SysInfoService;
 
 import java.util.List;
 
+/**
+ * 系统信息控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class SysInfoController {

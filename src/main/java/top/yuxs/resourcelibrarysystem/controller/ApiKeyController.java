@@ -9,16 +9,25 @@ import top.yuxs.resourcelibrarysystem.service.ApiKeyService;
 import top.yuxs.resourcelibrarysystem.utils.ApiKeyUtil;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * api 控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class ApiKeyController {
     @Autowired
     private ApiKeyService apiKeyService;
+
+    /**
+     * 添加api密钥
+     * @param apiKey
+     * @return
+     * @throws ParseException
+     */
     @PostMapping("/apikey/add")
     public Result<String> PostApiKey(@RequestBody ApiKey apiKey) throws ParseException {
         String apikey = UUID.randomUUID().toString().replaceAll("-", "");
@@ -53,17 +62,32 @@ public class ApiKeyController {
             return Result.error("添加apiKey失败！！！");
         }
     }
+
+    /**
+     * 获取当前登录用户的api密钥列表
+     * @return
+     */
     @GetMapping("/apikey/get/user")
     public Result<List<ApiKey>> getApiKeyByUserId(){
         List<ApiKey> cs = apiKeyService.findByUserId(StpUtil.getLoginIdAsLong());
         return Result.success(cs);
     }
+
+    /**
+     * 获取所有api密钥列表
+     * @return
+     */
     @GetMapping("/apikey/get/all")
     public Result<List<ApiKey>> getApiKeyAll(){
         List<ApiKey> cs = apiKeyService.findByAll();
         return Result.success(cs);
     }
-//    公开查询
+
+    /**
+     * 根据密钥查询是否过期
+     * @param apikey
+     * @return
+     */
     @GetMapping("/public/apikey/{apikey}")
     public Result<String> keyContrast(@PathVariable String apikey){
 //        ApiKey  keyInfo  = apiKeyService.findByKey(apikey);

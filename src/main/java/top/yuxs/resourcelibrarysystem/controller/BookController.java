@@ -11,6 +11,9 @@ import top.yuxs.resourcelibrarysystem.pojo.Result;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 图书管理控制
+ */
 @RestController
 @RequestMapping("/api/resources/public")
 public class BookController {

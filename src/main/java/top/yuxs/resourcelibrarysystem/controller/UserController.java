@@ -18,9 +18,13 @@ import top.yuxs.resourcelibrarysystem.pojo.Users;
 import top.yuxs.resourcelibrarysystem.service.UserLoginLogService;
 import top.yuxs.resourcelibrarysystem.service.UserService;
 import top.yuxs.resourcelibrarysystem.utils.IPUtils;
+import top.yuxs.resourcelibrarysystem.utils.SysOperLogUtil;
 
 import java.util.List;
 
+/**
+ * 用户控制器
+ */
 @RestController
 @RequestMapping("/api/resources")
 public class UserController {
@@ -30,8 +34,15 @@ public class UserController {
     private UserLoginLogService userLoginLogService;
     @Autowired
     private IPUtils ipUtils;
-    
-    //注册接口（待修改）
+
+    @Autowired
+    private SysOperLogUtil sysOperLogUtil;
+
+    /**
+     * 注册接口（待修改）
+     * @param registerDTO
+     * @return
+     */
     @PostMapping("/sign")
     public Result<String> register(@RequestBody @Valid UserRegisterDTO registerDTO) {
         if(registerDTO.getRoleId()==1){
@@ -45,19 +56,44 @@ public class UserController {
             }
         }
     }
-    //注册接口-V2
+
+    /**
+     * 注册接口-V2
+     * @param users 用户数据
+     * @return
+     */
     @PostMapping("/sign/v2")
     public Result<String> registerV2(@RequestBody Users users){
         userService.registerV2(users);
         return Result.success("注册成功！");
     }
-    //登录接口
+    /**
+     * 登录接口
+     * @param phoneNumber 手机号
+     * @param password 密码
+     * @param request 请求？
+     * @return
+     */
     @PostMapping("/login")
     public Result<String> login(String phoneNumber, String password, HttpServletRequest request) {
         Users loginUser = userService.findPhoneNumber(phoneNumber);
+        sysOperLogUtil.add("请求登录接口",
+                0,
+                "POST",
+                "POST",
+                0,
+                "/api/resources/login",
+                "/api/resources/login",
+                "/api/resources/login",
+                "/api/resources/login",
+                " "+phoneNumber+password,
+                0,
+                "null",
+                request
+        );
         //判断用户是否存在
         if(loginUser == null) {
-            return Result.error("用户手机号错误" + phoneNumber + password);
+            return Result.error("用户手机号错误" + phoneNumber);
         }
         if(password.equals(loginUser.getPassword())) {
             // 获取用户角色
@@ -81,15 +117,21 @@ public class UserController {
             return Result.error("密码错误，请重新输入");
         }
     }
-    //获取用户信息
+
+    /**
+     * 获取用户信息
+     * @return
+     */
     @GetMapping("/userInfo")
     public Result<Users> selectById(){
         long userId = StpUtil.getLoginIdAsLong();
         Users userinfo  = userService.selectById(userId);
         return Result.success(userinfo);
     }
-
-    // 获取当前用户的详细信息（包含角色和权限）
+    /**
+     *  获取当前用户的详细信息（包含角色和权限）
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/user/details")
     public Result<UserDTO> getCurrentUserDetails() {
@@ -98,7 +140,10 @@ public class UserController {
         return Result.success(userDTO);
     }
 
-    // 获取当前用户的角色列表
+    /**
+     * 获取当前用户的角色列表
+     * @return
+     */
     @GetMapping("/user/roles")
     public Result<List<Role>> getCurrentUserRoles() {
         long userId = StpUtil.getLoginIdAsLong();
@@ -106,7 +151,10 @@ public class UserController {
         return Result.success(roles);
     }
 
-    // 获取当前用户的权限列表
+    /**
+     * 获取当前用户的权限列表
+     * @return
+     */
     @GetMapping("/user/permissions")
     public Result<List<Permission>> getCurrentUserPermissions() {
         long userId = StpUtil.getLoginIdAsLong();
@@ -126,7 +174,11 @@ public class UserController {
 //        }
 //    }
 
-    // 修改密码
+    /**
+     * 修改密码
+     * @param passwordDTO
+     * @return
+     */
     @PutMapping("/user/password")
     public Result<String> updatePassword(@RequestBody @Valid PasswordUpdateDTO passwordDTO) {
         try {
@@ -139,15 +191,22 @@ public class UserController {
     }
     //忘记密码
 
-    // 获取所有用户详细信息
+    /**
+     * 获取所有用户详细信息
+     * @return
+     */
     @GetMapping("/admin/users")
 //    @RequiresPermission("user:view")
     public Result<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsersDetails();
         return Result.success(users);
     }
-    
-    // 删除用户
+
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
     @DeleteMapping("/admin/users/{userId}")
 //    @RequiresPermission("user:delete")
     public Result<String> deleteUser(@PathVariable Long userId) {
@@ -158,8 +217,14 @@ public class UserController {
             return Result.error(e.getMessage());
         }
     }
-    
-    // 更新用户完整信息
+
+
+    /**
+     * 更新用户完整信息
+     * @param userId
+     * @param updateDTO
+     * @return
+     */
     @PutMapping("/admin/users/{userId}")
 //    @RequiresPermission("user:update")
     public Result<String> updateUserComplete(

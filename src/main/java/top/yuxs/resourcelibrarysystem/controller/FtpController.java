@@ -1,11 +1,8 @@
 package top.yuxs.resourcelibrarysystem.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,8 +12,6 @@ import top.yuxs.resourcelibrarysystem.service.FileDataService;
 import top.yuxs.resourcelibrarysystem.utils.FtpUtil;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,6 +20,9 @@ import java.util.UUID;
 
 import static cn.dev33.satoken.SaManager.log;
 
+/**
+ * FTP 文件上传控制器
+ */
 @RestController
 @RequestMapping("/api/resources/ftp")
 public class FtpController {
